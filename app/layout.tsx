@@ -1,8 +1,8 @@
 import { GeistSans } from 'geist/font/sans'
-import Link from 'next/link'
+import { Header } from '@/components/Header/Header'
 
-const defaultUrl = process.env.NEXT_BASE_URL
-  ? `https://${process.env.NEXT_BASE_URL}`
+const defaultUrl = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
   : 'http://localhost:3000'
 
 export const metadata = {
@@ -16,11 +16,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={GeistSans.className}>
       <body>
-        <header>
-          <nav>
-            <Link href="/">Home</Link> | <Link href="/projects">Projects</Link>
-          </nav>
-        </header>
+        <Header />
 
         <main>{children}</main>
       </body>
