@@ -1,5 +1,6 @@
 import { GeistSans } from 'geist/font/sans'
 import { Header } from '@/components/Header/Header'
+import '../styles/main.scss'
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`

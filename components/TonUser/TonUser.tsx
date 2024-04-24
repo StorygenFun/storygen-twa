@@ -3,7 +3,6 @@
 import { FC } from 'react'
 import {
   CHAIN,
-  Locales,
   SendTransactionRequest,
   TonConnectButton,
   useIsConnectionRestored,
@@ -11,14 +10,15 @@ import {
   useTonConnectUI,
   useTonWallet,
 } from '@tonconnect/ui-react'
+import styles from './TonUser.module.scss'
 
 export const TonUser: FC = () => {
   const connectionRestored = useIsConnectionRestored()
   const userFriendlyAddress = useTonAddress()
   const wallet = useTonWallet()
-  console.log('🚀 ~ wallet:', wallet)
+  console.log('💰:', wallet)
 
-  const [tonConnectUI, setOptions] = useTonConnectUI()
+  const [tonConnectUI] = useTonConnectUI()
 
   const transaction: SendTransactionRequest = {
     validUntil: Math.floor(Date.now() / 1000) + 60 * 60 * 24,
@@ -35,10 +35,6 @@ export const TonUser: FC = () => {
     return address.slice(0, 4) + '...' + address.slice(-4)
   }
 
-  const handleLanguageChange = (lang: string) => {
-    setOptions({ language: lang as Locales })
-  }
-
   const logout = async () => {
     await tonConnectUI.disconnect()
   }
@@ -48,19 +44,12 @@ export const TonUser: FC = () => {
   }
 
   return (
-    <div>
+    <div className={styles.tonUser}>
       {userFriendlyAddress ? (
         <>
           <button onClick={logout}>{formatAddress(userFriendlyAddress)}</button>
-          <div>
-            <label>language</label>
-            <select onChange={e => handleLanguageChange(e.target.value)}>
-              <option value="en">en</option>
-              <option value="ru">ru</option>
-            </select>
-          </div>
           <button onClick={() => tonConnectUI.sendTransaction(transaction)}>
-            Send transaction
+            Test transaction
           </button>
         </>
       ) : (
