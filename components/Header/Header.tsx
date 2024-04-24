@@ -1,9 +1,9 @@
 'use client'
 
 import { FC } from 'react'
-import { TonConnectButton } from '@tonconnect/ui-react'
 import { TonConnectUIProvider } from '@tonconnect/ui-react'
 import Link from 'next/link'
+import { TonUser } from '../TonUser/TonUser'
 
 export const Header: FC = () => {
   return (
@@ -12,7 +12,8 @@ export const Header: FC = () => {
         <nav>
           <Link href="/">Home</Link> | <Link href="/projects">Projects</Link>
         </nav>
-        <TonConnectButton />
+
+        <TonUser />
       </header>
     </TonConnectUIProvider>
   )
