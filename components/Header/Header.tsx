@@ -7,7 +7,7 @@ import { TonUser } from '../TonUser/TonUser'
 
 export const Header: FC = () => {
   return (
-    <TonConnectUIProvider manifestUrl="https://<YOUR_APP_URL>/tonconnect-manifest.json">
+    <TonConnectUIProvider manifestUrl={`https://storygen-fun.vercel.app/tonconnect-manifest.json`}>
       <header>
         <nav>
           <Link href="/">Home</Link> | <Link href="/projects">Projects</Link>
