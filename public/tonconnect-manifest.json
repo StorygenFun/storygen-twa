@@ -1,5 +1,5 @@
 {
-  "url": "https://127.0.0.1:4480",
+  "url": "https://storygen-gamma.vercel.app",
   "name": "StoryGen",
-  "iconUrl": "https://127.0.0.1:4480/logo.png"
+  "iconUrl": "https://storygen-gamma.vercel.app/logo.png"
 }
