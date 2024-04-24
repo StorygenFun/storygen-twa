@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 4480 --experimental-https",
+    "dev": "next dev -p 4480",
     "build": "next build",
     "start": "next start",
     "export": "npm run build && next export"
   },
   "dependencies": {
+    "@next/env": "^14.2.3",
     "@supabase/ssr": "latest",
     "@supabase/supabase-js": "latest",
     "@tonconnect/ui-react": "^2.0.2",

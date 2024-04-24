@@ -3,7 +3,7 @@ import { Header } from '@/components/Header/Header'
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
-  : 'http://localhost:3000'
+  : 'http://localhost:4480'
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
@@ -16,7 +16,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={GeistSans.className}>
       <body>
-        <Header />
+        <Header siteUrl={process.env.VERCEL_URL || 'https://storygen-fun.vercel.app'} />
 
         <main>{children}</main>
       </body>

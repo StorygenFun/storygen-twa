@@ -5,9 +5,13 @@ import { TonConnectUIProvider } from '@tonconnect/ui-react'
 import Link from 'next/link'
 import { TonUser } from '../TonUser/TonUser'
 
-export const Header: FC = () => {
+type Props = {
+  siteUrl: string
+}
+
+export const Header: FC<Props> = ({ siteUrl }) => {
   return (
-    <TonConnectUIProvider manifestUrl={`https://storygen-fun.vercel.app/tonconnect-manifest.json`}>
+    <TonConnectUIProvider manifestUrl={`${siteUrl}/tonconnect-manifest.json`}>
       <header>
         <nav>
           <Link href="/">Home</Link> | <Link href="/projects">Projects</Link>
