@@ -1,7 +1,6 @@
 'use client'
 
 import { FC } from 'react'
-// import { User } from '@supabase/supabase-js'
 import {
   CHAIN,
   SendTransactionRequest,
@@ -11,7 +10,6 @@ import {
   useTonConnectUI,
   useTonWallet,
 } from '@tonconnect/ui-react'
-// import { client } from '@/utils/supabase/client'
 import styles from './TonUser.module.scss'
 
 export const TonUser: FC = () => {
@@ -19,8 +17,6 @@ export const TonUser: FC = () => {
   const userFriendlyAddress = useTonAddress()
   const wallet = useTonWallet()
   console.log('🚀 ~ wallet:', wallet)
-
-  // const { address, publicKey } = wallet?.account || {}
 
   const [tonConnectUI] = useTonConnectUI()
 
@@ -39,42 +35,8 @@ export const TonUser: FC = () => {
     return address.slice(0, 4) + '...' + address.slice(-4)
   }
 
-  // const [user, setUser] = useState<User | null>(null)
-
-  // const authenticateWithSupabase = useCallback(async () => {
-  //   if (address && publicKey) {
-  //     const { data, error } = await client.auth.signInAnonymously({
-  //       options: {
-  //         data: { address, publicKey },
-  //       },
-  //     })
-  //     console.log('🚀 ~ authenticateWithSupabase ~ data:', data)
-  //     setUser(data?.user || null)
-  //     console.error(error)
-  //   }
-  // }, [address, publicKey])
-
-  // const checkUser = useCallback(async () => {
-  //   const user = await client.auth.getUser()
-  //   const userData = user?.data?.user
-  //   console.log('🚀 ~ checkUser ~ userData:', userData)
-  //   setUser(userData || null)
-  //   if (!userData) {
-  //     await authenticateWithSupabase()
-  //   }
-  // }, [authenticateWithSupabase])
-
-  // useEffect(() => {
-  //   if (!address || !!user) return
-  //   if (!user) {
-  //     checkUser()
-  //   }
-  // }, [address, checkUser, user])
-
   const handleLogout = async () => {
     await tonConnectUI.disconnect()
-    // await client.auth.signOut()
-    // setUser(null)
   }
 
   if (!connectionRestored) {

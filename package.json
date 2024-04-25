@@ -5,13 +5,10 @@
   "scripts": {
     "dev": "next dev -p 4480",
     "build": "next build",
-    "start": "next start",
-    "export": "npm run build && next export"
+    "start": "next start"
   },
   "dependencies": {
     "@next/env": "^14.2.3",
-    "@supabase/ssr": "latest",
-    "@supabase/supabase-js": "latest",
     "@tonconnect/ui-react": "^2.0.2",
     "autoprefixer": "10.4.19",
     "axios": "^1.6.8",
