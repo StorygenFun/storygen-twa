@@ -1,5 +1,4 @@
 import { createClient } from '@/utils/supabase/server'
-import AuthButton from '../components/AuthButton'
 
 export default async function Index() {
   const canInitSupabaseClient = () => {
@@ -16,7 +15,7 @@ export default async function Index() {
   return (
     <div>
       <nav>
-        <div>{isSupabaseConnected && <AuthButton />}</div>
+        <div>{isSupabaseConnected ? <div>Login please!</div> : <div>Hello bro!</div>}</div>
       </nav>
     </div>
   )
