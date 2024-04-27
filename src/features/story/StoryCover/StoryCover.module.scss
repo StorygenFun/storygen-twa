@@ -28,7 +28,7 @@
 }
 
 .clear {
-  position: absolute;
+  position: absolute !important;
   top: var(--space-base);
   right: var(--space-base);
 }
