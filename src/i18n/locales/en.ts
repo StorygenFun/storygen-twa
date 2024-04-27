@@ -6,6 +6,7 @@ const translation = {
   StoryPage: {
     stories: 'Stories',
     yourStories: 'Your Stories',
+    storiesLoading: 'We upload your stories, please, wait a moment...',
     createNewStory: 'Create new story',
     defaultTitle: 'New Story',
     prompt: 'Describe your story',
@@ -90,8 +91,8 @@ storyTitles - an array of 10 story titles.
   },
   notFound: {
     stories: {
-      title: 'No stories yet',
-      subTitle: 'You can create your first story',
+      title: 'There are no stories here yet',
+      subTitle: 'But you can create your first story right now!',
       cta: 'Start writing',
     },
     story: {

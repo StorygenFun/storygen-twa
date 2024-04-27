@@ -2,6 +2,7 @@
 
 import { FC, useCallback, useMemo, useState } from 'react'
 import { notification } from 'antd'
+import { Spinner } from '@/components/Spinner/Spinner'
 import { StepProgress } from '@/components/StepProgress/StepProgress'
 import { LLMImageModel, LLMTextModel } from '@/features/llm/types'
 import { useSceneStore } from '@/features/scene/sceneStore'
@@ -32,7 +33,7 @@ export const Story: FC<StoryProps> = ({ storyId, siteUrl }) => {
   const { t } = useTranslation()
 
   useFetchAllStories()
-  const { updateStory } = useStoryStore()
+  const { isStoriesLoading, updateStory } = useStoryStore()
   const { createScene, generatedScene, updateGeneratedScene } = useSceneStore()
 
   const { getStoryById } = useStoryStore()
@@ -273,6 +274,10 @@ export const Story: FC<StoryProps> = ({ storyId, siteUrl }) => {
     //   setIsCoverGenerating(false)
     // }
     setIsCoverGenerating(false)
+  }
+
+  if (isStoriesLoading) {
+    return <Spinner content={t('StoryPage.storiesLoading')} />
   }
 
   if (!story) return null

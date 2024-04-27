@@ -5,6 +5,7 @@ import { UUID } from '@/types/common'
 import { IStory } from './type'
 
 type StoryState = {
+  isStoriesLoading: boolean
   stories: IStory[]
   fetchAllStories: () => Promise<IStory[] | undefined>
   fetchStoryById: (id: UUID) => Promise<IStory | undefined>
@@ -18,8 +19,10 @@ type StoryState = {
 
 export const useStoryStore = create<StoryState>()(
   devtools((set, get) => ({
+    isStoriesLoading: true,
     stories: [],
     fetchAllStories: async () => {
+      set({ isStoriesLoading: true })
       try {
         const stories = await localDB.stories.toArray()
         set({
@@ -28,6 +31,8 @@ export const useStoryStore = create<StoryState>()(
         return stories
       } catch (err) {
         console.error('fetchAllStories:', err)
+      } finally {
+        set({ isStoriesLoading: false })
       }
     },
     fetchStoryById: async (id: UUID) => {
@@ -56,12 +61,13 @@ export const useStoryStore = create<StoryState>()(
     },
     updateStory: async (storyId, updatedFields) => {
       try {
+        const updatedFieldsWithDate = { ...updatedFields, updatedAt: new Date().toISOString() }
         set(state => ({
           stories: state.stories.map(story =>
-            story.id === storyId ? { ...story, ...updatedFields } : story,
+            story.id === storyId ? { ...story, ...updatedFieldsWithDate } : story,
           ),
         }))
-        await localDB.stories.update(storyId, updatedFields)
+        await localDB.stories.update(storyId, updatedFieldsWithDate)
       } catch (err) {
         console.error('updateStory:', err)
       }
@@ -86,7 +92,9 @@ export const useStoryStore = create<StoryState>()(
     },
     getAllStories: () => {
       const { stories } = get()
-      return stories
+      const storiesCopy = [...stories]
+      storiesCopy.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+      return storiesCopy
     },
     getStoryById: storyId => {
       if (!storyId) return null

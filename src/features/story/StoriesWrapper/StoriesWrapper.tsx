@@ -5,6 +5,7 @@ import { PlusOutlined } from '@ant-design/icons'
 import { Button } from 'antd'
 import { v4 as uuidv4 } from 'uuid'
 import { Heading } from '@/components/Heading/Heading'
+import { Spinner } from '@/components/Spinner/Spinner'
 import { Language } from '@/features/localization/types'
 import { useTranslation } from '@/i18n/client'
 import { UUID } from '@/types/common'
@@ -19,7 +20,7 @@ export const StoriesWrapper: FC = () => {
   const currentLanguage = i18n.language as Language
 
   useFetchAllStories()
-  const { createStory, getAllStories, deleteStory } = useStoryStore()
+  const { isStoriesLoading, createStory, getAllStories, deleteStory } = useStoryStore()
 
   const storiesList = getAllStories()
 
@@ -35,11 +36,17 @@ export const StoriesWrapper: FC = () => {
       summary_en: '',
       sceneIds: [],
       lang: currentLanguage,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     })
   }
 
   const handleStoryDelete = async (id: UUID) => {
     await deleteStory(id)
+  }
+
+  if (isStoriesLoading) {
+    return <Spinner content={t('StoryPage.storiesLoading')} />
   }
 
   return (

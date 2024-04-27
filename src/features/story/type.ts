@@ -57,6 +57,8 @@ export type IStory = StoryOptions & {
   cover_text_en?: string
   response?: string
   names?: string[]
+  createdAt: string
+  updatedAt: string
 }
 
 export type ShortScene = {

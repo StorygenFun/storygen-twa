@@ -15,6 +15,7 @@ type Props = {
 }
 
 export const StoryCard: FC<Props> = ({ story, onDelete }) => {
+  const updatedAt = new Date(story.updatedAt).toLocaleString()
   return (
     <Card
       className={styles.card}
@@ -47,7 +48,12 @@ export const StoryCard: FC<Props> = ({ story, onDelete }) => {
             {story.title}
           </Link>
         }
-        description={story.description}
+        description={
+          <>
+            <div>{story.description}</div>
+            <div>{updatedAt}</div>
+          </>
+        }
       />
     </Card>
   )
