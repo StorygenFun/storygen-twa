@@ -18,7 +18,7 @@ type Props = {
 
 export const StoryCard: FC<Props> = ({ story, onDelete }) => {
   const { t } = useTranslation()
-  const updatedAt = new Date(story.updatedAt).toLocaleString()
+  const updated_at = new Date(story.updated_at).toLocaleString()
 
   return (
     <Card
@@ -38,7 +38,7 @@ export const StoryCard: FC<Props> = ({ story, onDelete }) => {
         </Link>
       }
       actions={[
-        <div key={1}>{updatedAt}</div>,
+        <div key={1}>{updated_at}</div>,
         <Popconfirm
           key={2}
           title={t('StoryPage.removeStory')}

@@ -12,6 +12,7 @@
     "@ant-design/icons": "^5.3.6",
     "@ant-design/nextjs-registry": "^1.0.0",
     "@next/env": "^14.2.3",
+    "@ton/core": "^0.56.3",
     "@tonconnect/ui-react": "^2.0.2",
     "antd": "^5.16.4",
     "axios": "^1.6.8",

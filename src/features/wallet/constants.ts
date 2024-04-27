@@ -1,0 +1,1 @@
+export const GENERATION_COST = 10000000

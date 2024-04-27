@@ -47,6 +47,10 @@ const translation = {
       seniors: 'Seniors',
     },
     numberOfScenes: 'Number of scenes',
+    paymentModalTitle: 'Оплата генерации новой истории',
+    payModalText: 'Стоимость складывается из количества сцен и генерации обложки к истории.',
+    payModalCost: 'Общая стоимость генерации истории',
+    generateStoryFor: 'Сгенерировать историю за {{cost}}',
     generateScenes: 'Generate scenes',
     generatedScenes: 'Generated scenes for your story',
     regenerate: 'Regenerate with new data',
@@ -110,6 +114,7 @@ storyTitles - an array of 10 story titles.
     cancel: 'Cancel',
     yes: 'Yes',
     no: 'No',
+    pay: 'Pay',
     clearDatabase: 'Clear Database',
   },
   notices: {

@@ -7,6 +7,10 @@ import { ActionBar } from '@/components/ActionBar/ActionBar'
 import { LLMTextModelList } from '@/features/llm/constants'
 import { LLMTextModel } from '@/features/llm/types'
 import { IStory, StoryAudience, StoryGenre, StoryOptions, StoryWriter } from '@/features/story/type'
+import {
+  calculateStoryGenerationCost,
+  getReadableCost,
+} from '@/features/wallet/utils/payment.utils'
 import { useTranslation } from '@/i18n/client'
 import styles from './StoryForm.module.scss'
 
@@ -108,7 +112,9 @@ export const StoryForm: FC<Props> = ({ story, onGenerate }) => {
         <ActionBar
           actionStart={
             <Button type="primary" disabled={!prompt} onClick={handleSubmit}>
-              {t('StoryPage.generateScenes')}
+              {t('StoryPage.generateStoryFor', {
+                cost: getReadableCost(calculateStoryGenerationCost(scenesNum)),
+              })}
             </Button>
           }
         />

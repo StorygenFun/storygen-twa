@@ -8,6 +8,7 @@ import { LLMImageModel, LLMTextModel } from '@/features/llm/types'
 import { useSceneStore } from '@/features/scene/sceneStore'
 import { extractObjectFromString, formatResponse } from '@/features/story/utils/story.utils'
 import { useTranslation } from '@/i18n/client'
+import { StoryPayment } from '../StoryPayment/StoryPayment'
 import { StoryWrapper } from '../StoryWrapper/StoryWrapper'
 import { useFetchAllStories } from '../hooks/fetch-stories.hook'
 import { useStoryStore } from '../storyStore'
@@ -23,9 +24,10 @@ import { StoryView } from './StoryView'
 type StoryProps = {
   storyId: string
   siteUrl: string
+  serviceWallet?: string
 }
 
-export const Story: FC<StoryProps> = ({ storyId, siteUrl }) => {
+export const Story: FC<StoryProps> = ({ storyId, siteUrl, serviceWallet }) => {
   const { t } = useTranslation()
 
   useFetchAllStories()
@@ -35,6 +37,7 @@ export const Story: FC<StoryProps> = ({ storyId, siteUrl }) => {
   const { getStoryById } = useStoryStore()
   const story = getStoryById(storyId)
 
+  const [storyForPay, setStoryForPay] = useState<IStory | null>(null)
   const [isStoryGenerating, setIsStoryGenerating] = useState(false)
   const [isSummaryGenerating] = useState(false)
   const [isMetaGenerating, setIsMetaGenerating] = useState(false)
@@ -68,13 +71,21 @@ export const Story: FC<StoryProps> = ({ storyId, siteUrl }) => {
   )
 
   const handleStoryGenerate = async (updatedStory: IStory) => {
+    setStoryForPay(null)
     setIsStoryGenerating(true)
     const chatGPTResponse = await preGenerateStory(updatedStory, t)
     if (chatGPTResponse) {
-      openErrorNotification('Wrong answer')
       handleUpdate({ ...updatedStory, response: chatGPTResponse.trim() })
     }
     setIsStoryGenerating(false)
+  }
+
+  const handleStartGeneration = async (updatedStory: IStory) => {
+    if (updatedStory.payment_transaction) {
+      await handleStoryGenerate(updatedStory)
+      return
+    }
+    setStoryForPay(updatedStory)
   }
 
   const handleScenesGenerate = async () => {
@@ -164,11 +175,18 @@ export const Story: FC<StoryProps> = ({ storyId, siteUrl }) => {
           isCoverGenerating={isCoverGenerating}
           formattedResponse={formattedResponse}
           onUpdate={handleUpdate}
-          onStoryGenerate={handleStoryGenerate}
+          onStoryGenerate={handleStartGeneration}
           onStoryCancel={() => handleUpdate({ ...story, response: '' })}
           onScenesGenerate={handleScenesGenerate}
           onMetaGenerate={handleMetaGenerate}
           onCoverGenerate={handleCoverGenerate}
+        />
+
+        <StoryPayment
+          storyForPay={storyForPay}
+          onClear={() => setStoryForPay(null)}
+          onError={(error: string) => openErrorNotification(error)}
+          onGenerate={handleStoryGenerate}
         />
       </StoryWrapper>
 

@@ -61,7 +61,7 @@ export const useStoryStore = create<StoryState>()(
     },
     updateStory: async (storyId, updatedFields) => {
       try {
-        const updatedFieldsWithDate = { ...updatedFields, updatedAt: new Date().toISOString() }
+        const updatedFieldsWithDate = { ...updatedFields, updated_at: new Date().toISOString() }
         set(state => ({
           stories: state.stories.map(story =>
             story.id === storyId ? { ...story, ...updatedFieldsWithDate } : story,
@@ -93,7 +93,9 @@ export const useStoryStore = create<StoryState>()(
     getAllStories: () => {
       const { stories } = get()
       const storiesCopy = [...stories]
-      storiesCopy.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+      storiesCopy.sort(
+        (a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime(),
+      )
       return storiesCopy
     },
     getStoryById: storyId => {

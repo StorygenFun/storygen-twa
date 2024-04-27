@@ -47,6 +47,10 @@ const translation = {
       seniors: 'Пожилые',
     },
     numberOfScenes: 'Количество сцен',
+    paymentModalTitle: 'Оплата генерации новой истории',
+    payModalText: 'Стоимость складывается из количества сцен и генерации обложки к истории.',
+    payModalCost: 'Общая стоимость генерации истории',
+    generateStoryFor: 'Сгенерировать историю за {{cost}}',
     generateScenes: 'Сгенерировать сцены',
     generatedScenes: 'Сгенерированные сцены для вашей истории',
     regenerate: 'Перегенерировать с новыми данными',
@@ -111,6 +115,7 @@ storyTitles - массив из 10 названий истории на русс
     cancel: 'Отмена',
     yes: 'Да',
     no: 'Нет',
+    pay: 'Оплатить',
     clearDatabase: 'Очистить базу данных',
   },
   notices: {
