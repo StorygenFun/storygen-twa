@@ -27,7 +27,7 @@ type StoryProps = {
   serviceWallet?: string
 }
 
-export const Story: FC<StoryProps> = ({ storyId, siteUrl, serviceWallet }) => {
+export const Story: FC<StoryProps> = ({ storyId, siteUrl }) => {
   const { t } = useTranslation()
 
   useFetchAllStories()

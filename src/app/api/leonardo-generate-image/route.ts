@@ -2,9 +2,11 @@ import axios from 'axios'
 import { NextRequest } from 'next/server'
 import { LeonardoModel } from '@/features/llm/types'
 
-const fetchLeonardoResponse = async (prompt: string) => {
+const fetchLeonardoResponse = async (prompt: string): Promise<Response> => {
   const key = process.env.NEXT_PUBLIC_LEONARDO_API_KEY
-  if (!key) return Response.error()
+  if (!key) {
+    return new Response(null, { status: 500, statusText: 'API key is missing.' })
+  }
 
   const options = {
     method: 'POST',
@@ -36,15 +38,19 @@ const fetchLeonardoResponse = async (prompt: string) => {
     url: 'https://cloud.leonardo.ai/api/rest/v1/generations',
   }
 
-  return axios(options)
-    .then(response => {
-      const generationId = response.data.sdGenerationJob.generationId
-      return Response.json(generationId)
+  try {
+    const response = await axios(options)
+    const generationId = response.data.sdGenerationJob.generationId
+    return Response.json(generationId)
+  } catch (err: any) {
+    return new Response(JSON.stringify({ error: err.message }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
     })
-    .catch(err => console.error('Error:', err))
+  }
 }
 
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest): Promise<Response> {
   const body = await req.json()
   const { prompt } = body
 

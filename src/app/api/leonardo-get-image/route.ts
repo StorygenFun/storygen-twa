@@ -1,30 +1,29 @@
 import axios from 'axios'
-import { NextRequest } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
 const fetchLeonardoResponse = async (generationId: string) => {
   const key = process.env.NEXT_PUBLIC_LEONARDO_API_KEY
-  if (!key) return Response.error()
+  if (!key) return NextResponse.json({ error: 'Missing Leonardo API Key' }, { status: 500 })
 
-  return axios({
-    method: 'GET',
-    headers: {
-      Accept: 'application/json',
-      Authorization: `Bearer ${key}`,
-    },
-    url: `https://cloud.leonardo.ai/api/rest/v1/generations/${generationId}`,
-  })
-    .then(response => {
-      const imageUrl = response?.data?.generations_by_pk?.generated_images?.[0]?.url
-      console.log('🫤', imageUrl)
-      if (imageUrl) {
-        return Response.json(imageUrl)
-      } else {
-        return Response.json(null)
-      }
+  try {
+    const response = await axios({
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${key}`,
+      },
+      url: `https://cloud.leonardo.ai/api/rest/v1/generations/${generationId}`,
     })
-    .catch(err => {
-      return new Error(err)
-    })
+
+    const imageUrl = response?.data?.generations_by_pk?.generated_images?.[0]?.url
+
+    return imageUrl
+      ? NextResponse.json(imageUrl)
+      : NextResponse.json({ error: 'Image not found' }, { status: 404 })
+  } catch (err) {
+    console.error('Error fetching image:', err)
+    return NextResponse.json({ error: 'Failed to fetch image' }, { status: 500 })
+  }
 }
 
 export async function POST(req: NextRequest) {

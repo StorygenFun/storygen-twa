@@ -155,23 +155,39 @@ const generateWithOpenAIApi = async (story: IStory, model: LLMImageModel) => {
   }
 }
 
-const generateWithLeonardo = async (story: IStory) => {
+const generateWithLeonardo = async (story: IStory): Promise<string> => {
   try {
-    const { data: generationId } = await axios.post('/api/leonardo-generate-image', {
+    const { data: generationId } = await axios.post<string>('/api/leonardo-generate-image', {
       prompt: story.cover_text_en,
     })
+    // const generationId = 'd1451eb1-334c-46ee-842e-321f0c1f84d6'
 
-    const getGeneratedImage = () => {
-      return new Promise(resolve => {
+    const getGeneratedImage = (): Promise<string> => {
+      let totalTime = 0
+      const maxTime = 20000
+
+      return new Promise((resolve, reject) => {
         const checkImage = async () => {
-          const { data: imageUrl } = await axios.post('/api/leonardo-get-image', {
-            generationId: generationId,
-          })
+          try {
+            const { data: imageUrl } = await axios.post<string>('/api/leonardo-get-image', {
+              generationId,
+            })
 
-          if (imageUrl) {
-            resolve(imageUrl)
-          } else {
-            setTimeout(checkImage, 1000)
+            if (imageUrl) {
+              resolve(imageUrl)
+            } else if (totalTime < maxTime) {
+              setTimeout(checkImage, 1000)
+              totalTime += 1000
+            } else {
+              reject(new Error('Timeout reached without retrieving an image.'))
+            }
+          } catch (error: any) {
+            if (error.response && error.response.status === 404 && totalTime < maxTime) {
+              setTimeout(checkImage, 1000)
+              totalTime += 1000
+            } else {
+              reject(new Error('An error occurred: ' + error.message))
+            }
           }
         }
 

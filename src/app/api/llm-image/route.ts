@@ -4,13 +4,16 @@ import { NextRequest } from 'next/server'
 import { getClient } from '@/features/llm/constants'
 import { LLMImageModel } from '@/features/llm/types'
 
-const fetchOpenAI = async (prompt: string, model: LLMImageModel, url?: string) => {
+const fetchOpenAI = async (
+  prompt: string,
+  model: LLMImageModel,
+  url?: string,
+): Promise<Response> => {
   const key = process.env.NEXT_PUBLIC_TOGETHER_API_KEY
-  if (!key) return Response.error()
+  if (!key) return new Response(null, { status: 500, statusText: 'API key is missing.' })
 
   const client = getClient(key, url)
-
-  if (!client) return Response.error()
+  if (!client) return new Response(null, { status: 500, statusText: 'Client creation failed.' })
 
   try {
     const response = await client.images.generate({
@@ -18,28 +21,29 @@ const fetchOpenAI = async (prompt: string, model: LLMImageModel, url?: string) =
       model: model,
     })
 
-    return Response.json(response.data)
+    return new Response(JSON.stringify(response.data), {
+      headers: { 'Content-Type': 'application/json' },
+    })
   } catch (error: any) {
     console.error(error)
-    throw new Error(error.message)
+    return new Response(JSON.stringify({ error: error.message }), { status: 500 })
   }
 }
 
-const fetchStabilityDiffusionResponse = async (prompt: string) => {
+const fetchStabilityDiffusionResponse = async (prompt: string): Promise<Response> => {
   const key = process.env.NEXT_PUBLIC_STABILITY_API_KEY
-  if (!key) return Response.error()
+  if (!key) return new Response(null, { status: 500, statusText: 'API key is missing.' })
 
-  const formData = {
-    prompt,
-    output_format: 'jpeg',
-  }
+  const formData = new FormData()
+  formData.append('prompt', prompt)
+  formData.append('output_format', 'jpeg')
 
   try {
-    const response = await axios.postForm(
+    const response = await axios.post(
       `https://api.stability.ai/v2beta/stable-image/generate/sd3`,
-      axios.toFormData(formData, new FormData()),
+      formData,
       {
-        validateStatus: undefined,
+        validateStatus: () => true,
         responseType: 'arraybuffer',
         headers: {
           Authorization: `Bearer ${key}`,
@@ -51,21 +55,21 @@ const fetchStabilityDiffusionResponse = async (prompt: string) => {
 
     if (response.status === 200) {
       const blob = new Blob([response.data], { type: 'image/jpeg' })
-      return URL.createObjectURL(blob)
+      return new Response(blob)
     } else {
-      throw new Error(`${response.status}: ${response.data.toString()}`)
+      return new Response(null, { status: response.status, statusText: response.statusText })
     }
-    return ''
-  } catch (error) {
+  } catch (error: any) {
     console.error(error)
+    return new Response(JSON.stringify({ error: error.message }), { status: 500 })
   }
 }
 
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest): Promise<Response> {
   const body = await req.json()
   const { prompt, model } = body
 
-  if (false && model === LLMImageModel.StabilityDiffusion3Turbo) {
+  if (model === LLMImageModel.StabilityDiffusion3Turbo) {
     return fetchStabilityDiffusionResponse(prompt)
   }
 
