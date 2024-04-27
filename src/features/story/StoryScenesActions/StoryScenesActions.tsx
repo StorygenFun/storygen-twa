@@ -2,7 +2,7 @@
 
 import { FC } from 'react'
 import { DeleteOutlined } from '@ant-design/icons'
-import { Button } from 'antd'
+import { Button, Popconfirm } from 'antd'
 import { useTranslation } from '@/i18n/client'
 import { useSceneStore } from '../../scene/sceneStore'
 import { useStoryStore } from '../storyStore'
@@ -32,8 +32,15 @@ export const StoryScenesActions: FC<Props> = ({ story }) => {
   }
 
   return (
-    <Button danger icon={<DeleteOutlined />} onClick={removeScenes}>
-      {t('StoryPage.removeScenes')}
-    </Button>
+    <Popconfirm
+      title={t('StoryPage.removeScenesQuestion')}
+      onConfirm={removeScenes}
+      okText={t('actions.yes')}
+      cancelText={t('actions.no')}
+    >
+      <Button danger icon={<DeleteOutlined />}>
+        {t('StoryPage.removeScenes')}
+      </Button>
+    </Popconfirm>
   )
 }

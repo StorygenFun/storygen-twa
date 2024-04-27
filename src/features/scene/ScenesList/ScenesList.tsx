@@ -1,7 +1,7 @@
 'use client'
 
 import { FC } from 'react'
-import { Spin } from 'antd'
+import { Spinner } from '@/components/Spinner/Spinner'
 import { useTranslation } from '@/i18n/client'
 import { IScene } from '../type'
 import styles from './ScenesList.module.scss'
@@ -23,11 +23,7 @@ export const ScenesList: FC<Props> = ({
 
   return (
     <>
-      {isStoryGenerating && (
-        <h1 className={styles.genTitle}>
-          {t('StoryPage.generatingScene')} <Spin />
-        </h1>
-      )}
+      {isStoryGenerating && <Spinner content={t('StoryPage.generatingScene')} />}
 
       {list?.map((scene, index) => (
         <section key={index} className={styles.scene}>

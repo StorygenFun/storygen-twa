@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
 
   const body = await req.json()
 
-  const { prompt, systemMessage, model, stream } = body
+  const { prompt, systemMessage, model } = body
 
   const TOGETHER_AI_URL = 'https://api.together.xyz/v1'
   const client = getClient(key, TOGETHER_AI_URL)
@@ -28,14 +28,9 @@ export async function POST(req: NextRequest) {
         },
       ],
       model: model || LLMTextModel.LLaMA3Chat70B,
-      stream,
     })
 
-    if (!stream) {
-      return Response.json(response.choices[0].message.content?.trim())
-    }
-
-    return Response.json(response)
+    return Response.json(response.choices[0].message.content?.trim())
   } catch (error: any) {
     console.error(error)
     throw new Error(error.message)

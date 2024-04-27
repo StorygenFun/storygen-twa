@@ -39,7 +39,8 @@ export const StoryCover: FC<Props> = ({ story, isGenerating, onGenerate }) => {
     <div className={styles.cover}>
       {story.cover && !isChanging ? (
         <div className={styles.poster}>
-          <Image src={story.cover} alt="" className={styles.image} />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={story.cover} alt="" className={styles.image} />
           <Button
             className={styles.clear}
             icon={<DeleteOutlined />}

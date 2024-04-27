@@ -1,7 +1,7 @@
 'use client'
 
 import { FC } from 'react'
-import { Button, Result } from 'antd'
+import { Button, Popconfirm, Result } from 'antd'
 import { ActionBar } from '@/components/ActionBar/ActionBar'
 import { useTranslation } from '@/i18n/client'
 import { CompactShortScene } from '../type'
@@ -44,7 +44,16 @@ export const StoryResponse: FC<Props> = ({ response, onCancel, onGenerate }) => 
       )}
 
       <ActionBar
-        actionStart={<Button onClick={onCancel}>{t('StoryPage.regenerate')}</Button>}
+        actionStart={
+          <Popconfirm
+            title={t('StoryPage.removeScenesQuestion')}
+            onConfirm={onCancel}
+            okText={t('actions.yes')}
+            cancelText={t('actions.no')}
+          >
+            <Button danger>{t('StoryPage.regenerate')}</Button>
+          </Popconfirm>
+        }
         actionEnd={
           <Button type="primary" onClick={onGenerate}>
             {t('StoryPage.generateFullStory')}

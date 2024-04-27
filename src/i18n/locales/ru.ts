@@ -9,6 +9,7 @@ const translation = {
     storiesLoading: 'Мы загружаем ваши истории, пожалуйста, подождите...',
     createNewStory: 'Создать новую историю',
     defaultTitle: 'Новая история',
+    languageAnswer: 'Отвечай на Русском языке',
     prompt: 'Опишите вашу историю',
     model: 'Модель',
     writerStyle: 'Стиль автора',
@@ -51,6 +52,7 @@ const translation = {
     generateFullStory: 'Сгенерировать полную историю',
     generatingScene: 'Генерация эпизодов',
     removeScenes: 'Удалить сцены',
+    removeScenesQuestion: 'Вы уверены, что хотите удалить эти сцены?',
     generateMetaData: 'Сгенерировать дополниельные данные',
     generatingMetaData: 'Генерация дополниельных данных',
     removeMetaData: 'Удалить дополниельные данные',
@@ -89,6 +91,7 @@ coverText - составь промпт для геренации иллюстр
 coverTextEn - перевод coverText на английский язык;
 description - короткое описание истории на русском языке;
 storyTitles - массив из 10 названий истории на русском языке.`,
+    sceneVolume: 'Напиши текст объёмом {{from}}-{{to}} символов.',
   },
   notFound: {
     stories: {

@@ -41,8 +41,8 @@ export const UserInfoModal: FC<Props> = ({ isOpen, walletAddress, onLogout, onCl
             title="Are you sure?"
             description="Anyway, you can always connect again"
             onConfirm={onLogout}
-            okText="Yes"
-            cancelText="No"
+            okText={t('actions.yes')}
+            cancelText={t('actions.no')}
           >
             <Button type="default" danger>
               Disconnect

@@ -9,6 +9,7 @@ const translation = {
     storiesLoading: 'We upload your stories, please, wait a moment...',
     createNewStory: 'Create new story',
     defaultTitle: 'New Story',
+    languageAnswer: 'Answer in English',
     prompt: 'Describe your story',
     model: 'Model',
     writerStyle: "Writer's style",
@@ -51,6 +52,7 @@ const translation = {
     generateFullStory: 'Generate full story',
     generatingScene: 'Generating scenes',
     removeScenes: 'Remove Scenes',
+    removeScenesQuestion: 'Are you sure to delete this scenes?',
     generateMetaData: 'Generate Meta Data',
     generatingMetaData: 'Generating Meta Data',
     removeMetaData: 'Remove Meta Data',
@@ -88,6 +90,7 @@ coverText - compose a prompt for generating an illustration for this story, a de
 description - a short description of the story;
 storyTitles - an array of 10 story titles.
 `,
+    sceneVolume: 'Write a text of {{from}}-{{to}} characters.',
   },
   notFound: {
     stories: {

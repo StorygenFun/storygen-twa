@@ -6,21 +6,18 @@ import { Spinner } from '@/components/Spinner/Spinner'
 import { StepProgress } from '@/components/StepProgress/StepProgress'
 import { LLMImageModel, LLMTextModel } from '@/features/llm/types'
 import { useSceneStore } from '@/features/scene/sceneStore'
-import { IScene } from '@/features/scene/type'
+import { extractObjectFromString, formatResponse } from '@/features/story/utils/story.utils'
 import { useTranslation } from '@/i18n/client'
-import { clog } from '@/utils/common.utils'
-import {
-  extractObjectFromString,
-  formatResponse,
-  getAudienceText,
-  getGenreText,
-  getNewStoryTaskText,
-  getWriterStyleText,
-} from '@/utils/story.utils'
 import { StoryWrapper } from '../StoryWrapper/StoryWrapper'
 import { useFetchAllStories } from '../hooks/fetch-stories.hook'
 import { useStoryStore } from '../storyStore'
-import { CompactShortScene, IStory } from '../type'
+import { IStory } from '../type'
+import {
+  generateCover,
+  generateMeta,
+  generateScenes,
+  preGenerateStory,
+} from '../utils/story-generator.utils'
 import { StoryView } from './StoryView'
 
 type StoryProps = {
@@ -29,21 +26,19 @@ type StoryProps = {
 }
 
 export const Story: FC<StoryProps> = ({ storyId, siteUrl }) => {
-  const PROMPT_SIZE = 2000
   const { t } = useTranslation()
 
   useFetchAllStories()
   const { isStoriesLoading, updateStory } = useStoryStore()
-  const { createScene, generatedScene, updateGeneratedScene } = useSceneStore()
+  const { createScene, generatedScene } = useSceneStore()
 
   const { getStoryById } = useStoryStore()
   const story = getStoryById(storyId)
 
   const [isStoryGenerating, setIsStoryGenerating] = useState(false)
-  const [isSummaryGenerating, setIsSummaryGenerating] = useState(false)
+  const [isSummaryGenerating] = useState(false)
   const [isMetaGenerating, setIsMetaGenerating] = useState(false)
   const [isCoverGenerating, setIsCoverGenerating] = useState(false)
-  const [changedStory, setChangedStory] = useState<IStory | null>(null)
 
   const formattedResponse = story?.response ? formatResponse(story?.response) : null
 
@@ -65,6 +60,13 @@ export const Story: FC<StoryProps> = ({ storyId, siteUrl }) => {
     })
   }
 
+  const openSuccessNotification = (message: string, description?: string) => {
+    api.success({
+      message,
+      description,
+    })
+  }
+
   const handleUpdate = useCallback(
     (story: IStory) => {
       updateStory(story.id, story)
@@ -72,137 +74,29 @@ export const Story: FC<StoryProps> = ({ storyId, siteUrl }) => {
     [updateStory],
   )
 
-  const fetchAIResponse = async (updatedStory: IStory, localKey?: string) => {
-    const systemMessageSize = 650
-
-    const systemMessage = [
-      getWriterStyleText(updatedStory, t),
-      getNewStoryTaskText(updatedStory, t),
-      getGenreText(updatedStory, t),
-      getAudienceText(updatedStory, t),
-      t('prompts.storyGenerator.main', {
-        num: updatedStory.scenesNum,
-        size: Math.round((PROMPT_SIZE - systemMessageSize) / (updatedStory?.scenesNum || 1)),
-      }),
-    ]
-      .filter(Boolean)
-      .join('\n')
-
-    const request = {
-      systemMessage,
-      prompt: updatedStory.prompt,
-      lang: updatedStory.lang,
-      model: updatedStory.model,
-    }
-
-    clog('Request', JSON.stringify(request))
-
-    // TODO: RENDER
-    // try {
-    //   const key = localKey || getKey(updatedStory.model as AITextModel)
-    //   return await askGPT(request, key)
-    // } catch (error) {
-    //   console.error(error)
-    // }
-  }
-
   const handleStoryGenerate = async (updatedStory: IStory) => {
-    setChangedStory(updatedStory)
     setIsStoryGenerating(true)
-    // TODO: RENDER
-    const chatGPTResponse = await fetchAIResponse(updatedStory)
-    // if (!chatGPTResponse && getKey(updatedStory.model as AITextModel)) {
-    //   openErrorNotification('Wrong answer')
-    //   setIsStoryGenerating(false)
-    //   return
-    // }
-    // if (chatGPTResponse) {
-    //   handleUpdate({ ...updatedStory, response: chatGPTResponse.trim() })
-    // }
+    const chatGPTResponse = await preGenerateStory(updatedStory, t)
+    if (chatGPTResponse) {
+      openErrorNotification('Wrong answer')
+      handleUpdate({ ...updatedStory, response: chatGPTResponse.trim() })
+    }
     setIsStoryGenerating(false)
-  }
-
-  const generateSceneContent = async (updatedStory: IStory, context: string) => {
-    const systemMessageSize = 300
-
-    const systemMessage = [
-      getWriterStyleText(updatedStory, t),
-      getGenreText(updatedStory, t),
-      getAudienceText(updatedStory, t),
-      t('prompts.sceneGenerator', {
-        size: systemMessageSize,
-      }),
-    ]
-      .filter(Boolean)
-      .join('\n')
-
-    const request = {
-      systemMessage,
-      prompt: t('prompts.scenePrompt', { context }),
-      lang: updatedStory.lang,
-      model: updatedStory.model,
-    }
-
-    clog('Request', JSON.stringify(request))
-
-    // TODO: RENDER
-    // return await askAIStream(request, getKey(updatedStory.model as AITextModel))
-  }
-
-  const generateSceneSummary = async (story: IStory, context: string) => {
-    const request = {
-      systemMessage: t('prompts.sceneSummaryGenerator'),
-      prompt: context,
-      lang: story.lang,
-      model: story.model,
-    }
-
-    clog('Request', JSON.stringify(request))
-
-    // TODO: RENDER
-    // return await askGPT(request, getKey(story.model as AITextModel))
   }
 
   const handleScenesGenerate = async () => {
     if (!story || !formattedResponse) return
     setIsStoryGenerating(true)
 
-    const scenes: IScene[] = []
-
-    // TODO: RENDER
-    // for (let i = 0; i < formattedResponse.length; i++) {
-    //   const context = buildScenePrompt(story, formattedResponse, i)
-    //   const stream = await generateSceneContent(story, context)
-    //   const teeStream = stream?.tee()
-
-    //   let content = ''
-    //   if (teeStream) {
-    //     for await (const chunk of teeStream[0]) {
-    //       content = content + chunk.choices[0]?.delta?.content || ''
-    //       updateGeneratedScene(content)
-    //     }
-    //   }
-
-    //   if (content) {
-    //     setIsSummaryGenerating(true)
-    //     const summary = await generateSceneSummary(story, content)
-    //     const scene: IScene = {
-    //       id: uuidv4(),
-    //       title: formattedResponse[i].t,
-    //       content,
-    //       summary: summary ? summary : undefined,
-    //     }
-    //     scenes.push(scene)
-    //     await createScene(scene)
-    //     await updateStory(story.id, { ...story, sceneIds: scenes.map(item => item.id) })
-    //     setIsSummaryGenerating(false)
-    //     updateGeneratedScene(null)
-    //   }
-    // }
+    const scenes = await generateScenes(story, formattedResponse, t)
 
     setIsStoryGenerating(false)
 
-    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
+    for (const scene of scenes) {
+      await createScene(scene)
+    }
+
+    await updateStory(story.id, { ...story, sceneIds: scenes.map(item => item.id) })
   }
 
   const handleMetaGenerate = async (model: LLMTextModel, context: string) => {
@@ -210,38 +104,29 @@ export const Story: FC<StoryProps> = ({ storyId, siteUrl }) => {
 
     setIsMetaGenerating(true)
 
-    const request = {
-      prompt: t('prompts.storySummaryGenerator', { context }),
-      lang: story.lang,
-      model: model || story.model,
+    const result = await generateMeta(story, model, context, t)
+
+    if (result) {
+      const resJSON = extractObjectFromString(result)
+
+      const update = {
+        ...story,
+        names: resJSON?.storyTitles || [],
+        description: resJSON?.description || '',
+        summary: resJSON?.summary || '',
+        summary_en: resJSON?.summaryEn || resJSON?.summary || '',
+        cover_text: resJSON?.coverText || '',
+        cover_text_en: resJSON?.coverTextEn || resJSON?.coverText || '',
+      }
+
+      await updateStory(story.id, update)
     }
 
-    clog('Request', JSON.stringify(request))
+    setIsMetaGenerating(false)
 
-    // TODO: RENDER
-    // const response = await askGPT(request, getKey(story.model as AITextModel))
+    window.scrollTo({ top: 0, behavior: 'smooth' })
 
-    // if (response) {
-    //   const resJSON = extractObjectFromString(response)
-
-    //   const update = {
-    //     ...story,
-    //     names: resJSON?.storyTitles || [],
-    //     description: resJSON?.description || '',
-    //     summary: resJSON?.summary || '',
-    //     summary_en: resJSON?.summaryEn || resJSON?.summary || '',
-    //     cover_text: resJSON?.coverText || '',
-    //     cover_text_en: resJSON?.coverTextEn || resJSON?.coverText || '',
-    //   }
-
-    //   await updateStory(story.id, update)
-    // }
-
-    // setIsMetaGenerating(false)
-
-    // window.scrollTo({ top: 0, behavior: 'smooth' })
-
-    // return response
+    return result
   }
 
   const handleCoverGenerate = async (model: LLMImageModel) => {
@@ -253,27 +138,18 @@ export const Story: FC<StoryProps> = ({ storyId, siteUrl }) => {
       cover: '',
     })
 
-    const options = {
-      model: model,
-      prompt: story.cover_text_en,
-      n: 1,
-    }
+    try {
+      const cover = await generateCover(story, model)
 
-    // TODO: RENDER
-    // try {
-    //   const response = await askGPTImage(options, getKey(model))
-    //   const imageData = response?.[0]
-    //   await updateStory(story.id, {
-    //     cover: imageData?.b64_json
-    //       ? `data:image/png;base64, ${imageData?.b64_json}`
-    //       : imageData?.url,
-    //   })
-    // } catch (error: any) {
-    //   openErrorNotification("Can't generate Image", error.message)
-    // } finally {
-    //   setIsCoverGenerating(false)
-    // }
-    setIsCoverGenerating(false)
+      await updateStory(story.id, {
+        cover,
+      })
+      openSuccessNotification('Cover generated')
+    } catch (error) {
+      openErrorNotification("Can't generate Image")
+    } finally {
+      setIsCoverGenerating(false)
+    }
   }
 
   if (isStoriesLoading) {
@@ -303,6 +179,8 @@ export const Story: FC<StoryProps> = ({ storyId, siteUrl }) => {
           onCoverGenerate={handleCoverGenerate}
         />
       </StoryWrapper>
+
+      {contextHolder}
     </>
   )
 }

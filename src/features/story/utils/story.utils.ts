@@ -1,4 +1,4 @@
-import { Translation } from '@/features/localization/types'
+import { Language, Translation } from '@/features/localization/types'
 import { CompactShortScene, IStory } from '@/features/story/type'
 
 export const getWriterStyleText = (story: IStory, t: Translation) => {
@@ -25,6 +25,22 @@ export const getAudienceText = (story: IStory, t: Translation) => {
 
 export const getNewStoryTaskText = (story: IStory, t: Translation) => {
   return t('prompts.storyGenerator.task', { num: story.scenesNum })
+}
+
+export const buildScenePrompt = (
+  story: IStory,
+  response: CompactShortScene[],
+  num: number,
+): string => {
+  const prefix = story.lang === Language.RU ? 'Эпизод' : 'Scene'
+  const config =
+    story.lang === Language.RU
+      ? `Максимально подробно напиши эпизод №${num + 1}`
+      : `Write episode number ${num + 1} in as much detail as possible`
+  const content = response
+    .map((scene, index) => `${prefix} ${index + 1}: ${scene.t}\n${scene.d}\n\n`)
+    .join('')
+  return `${content}\n${config}`
 }
 
 export const extractArrayFromString = (text?: string) => {

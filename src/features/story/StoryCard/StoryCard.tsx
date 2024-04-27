@@ -1,7 +1,6 @@
 import { FC } from 'react'
 import { DeleteOutlined, FileImageOutlined } from '@ant-design/icons'
 import { Button, Card } from 'antd'
-import Image from 'next/image'
 import Link from 'next/link'
 import { UUID } from '../../../types/common'
 import { IStory } from '../type'
@@ -22,7 +21,8 @@ export const StoryCard: FC<Props> = ({ story, onDelete }) => {
       cover={
         <Link href={`/projects/${story.id}`} className={styles.cover}>
           {story.cover ? (
-            <Image alt="example" src={story.cover} className={styles.image} />
+            // eslint-disable-next-line @next/next/no-img-element
+            <img alt="example" src={story.cover} className={styles.image} />
           ) : (
             <div className={styles.placeholder}>
               <FileImageOutlined className={styles.placeholderIcon} />
