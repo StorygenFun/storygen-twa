@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { v4 as uuidv4 } from 'uuid'
 import { Translation } from '@/features/localization/types'
 import { IScene } from '@/features/scene/type'
@@ -140,14 +141,10 @@ export const generateMeta = async (
   return await askTextLLM(request)
 }
 
-export const generateCover = async (story: IStory, model: LLMImageModel) => {
-  if (!story.cover_text_en) {
-    throw new Error('Cover prompt is empty')
-  }
-
+const generateWithOpenAIApi = async (story: IStory, model: LLMImageModel) => {
   const options: LLMImageQuery = {
     model,
-    prompt: story.cover_text_en,
+    prompt: story.cover_text_en || '',
   }
 
   try {
@@ -156,4 +153,46 @@ export const generateCover = async (story: IStory, model: LLMImageModel) => {
   } catch (error: any) {
     throw new Error("Can't generate Image", error.message)
   }
+}
+
+const generateWithLeonardo = async (story: IStory) => {
+  try {
+    const { data: generationId } = await axios.post('/api/leonardo-generate-image', {
+      prompt: story.cover_text_en,
+    })
+
+    const getGeneratedImage = () => {
+      return new Promise(resolve => {
+        const checkImage = async () => {
+          const { data: imageUrl } = await axios.post('/api/leonardo-get-image', {
+            generationId: generationId,
+          })
+
+          if (imageUrl) {
+            resolve(imageUrl)
+          } else {
+            setTimeout(checkImage, 1000)
+          }
+        }
+
+        checkImage()
+      })
+    }
+
+    return await getGeneratedImage()
+  } catch (error: any) {
+    throw new Error(error.message)
+  }
+}
+
+export const generateCover = async (story: IStory, model: LLMImageModel) => {
+  if (!story.cover_text_en) {
+    throw new Error('Cover prompt is empty')
+  }
+
+  if (model === LLMImageModel.Leonardo) {
+    return generateWithLeonardo(story)
+  }
+
+  return generateWithOpenAIApi(story, model)
 }

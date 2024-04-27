@@ -19,6 +19,8 @@ export const LLMImageModelList = new Map([
   [LLMImageModel.StableDiffusion2, 'Stable Diffusion 2.1'],
   [LLMImageModel.StableDiffusionXL, 'Stable Diffusion XL 1.0'],
   [LLMImageModel.AnalogDiffusion, 'Analog Diffusion'],
+  [LLMImageModel.Leonardo, 'Leonardo.AI'],
+  // [LLMImageModel.StabilityDiffusion3Turbo, 'Stable Diffusion 3 Turbo'],
 ])
 
 export const TOGETHER_AI_URL = 'https://api.together.xyz/v1'
