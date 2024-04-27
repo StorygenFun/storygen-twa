@@ -3,7 +3,6 @@
 import { FC, useState } from 'react'
 import { DeleteOutlined } from '@ant-design/icons'
 import { Button, Form, Select, Spin } from 'antd'
-import Image from 'next/image'
 import { LLMImageModelList } from '@/features/llm/constants'
 import { LLMImageModel } from '@/features/llm/types'
 import { useTranslation } from '@/i18n/client'
