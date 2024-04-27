@@ -1,6 +1,9 @@
+import { AntdRegistry } from '@ant-design/nextjs-registry'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import { Header } from '@/components/Header/Header'
+import { Headline } from '@/components/Headline/Headline'
+import { LocaleProvider } from '@/i18n/locale-provider'
+import { getLocale } from '@/i18n/server'
 import '../styles/main.scss'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -15,11 +18,17 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const locale = getLocale()
+
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body className={inter.className}>
-        <Header siteUrl={process.env.NEXT_PUBLIC_BASE_URL || 'https://storygen-fun.vercel.app'} />
-        {children}
+        <LocaleProvider value={locale}>
+          <AntdRegistry>
+            <Headline />
+            {children}
+          </AntdRegistry>
+        </LocaleProvider>
       </body>
     </html>
   )

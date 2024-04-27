@@ -1,0 +1,15 @@
+.story {
+  flex: 1;
+  position: relative;
+  font-family: 'Lora', serif;
+}
+
+.nameOption {
+  display: flex;
+}
+
+.nameSelector {
+  @media (max-width: 800px) {
+    margin-inline-start: auto;
+  }
+}

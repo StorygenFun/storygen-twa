@@ -3,7 +3,7 @@
 import { FC } from 'react'
 import { TonConnectUIProvider } from '@tonconnect/ui-react'
 import Link from 'next/link'
-import { TonUser } from '../TonUser/TonUser'
+import { TonUser } from '../../features/wallet/TonUser/TonUser'
 import styles from './Header.module.scss'
 
 type Props = {

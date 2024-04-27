@@ -1,25 +1,38 @@
 'use client'
 
 import { FC } from 'react'
-import axios from 'axios'
+import { FileImageOutlined, FileTextOutlined } from '@ant-design/icons'
+import { Button } from 'antd'
+import { askImageLLM, askTextLLM } from '@/features/llm/api'
+import { LLMTextModel } from '@/features/llm/types'
 
 export const OpenAiConnector: FC = () => {
-  const fetchData = async () => {
-    try {
-      const res = await axios.post('/api/openai', {
-        prompt: 'Hello, world!',
-        systemMessage: 'You are a mega-robot.',
-      })
+  const handleTextRequest = async () => {
+    return await askTextLLM({
+      prompt: 'Hello, world!',
+      systemMessage: 'You are a mega-robot.',
+      model: LLMTextModel.LLaMA3Chat70B,
+    })
+  }
 
-      console.log(res.data)
-    } catch (error) {
-      console.error('Failed to fetch API', error)
-    }
+  const handleImageRequest = async () => {
+    return await askImageLLM({
+      prompt: 'Big Boss',
+    })
   }
 
   return (
     <div>
-      <button onClick={fetchData}>Test OpenAI</button>
+      <p>
+        <Button type="primary" icon={<FileTextOutlined />} onClick={handleTextRequest}>
+          Ask Text LLM
+        </Button>
+      </p>
+      <p>
+        <Button type="primary" icon={<FileImageOutlined />} onClick={handleImageRequest}>
+          Ask Image LLM
+        </Button>
+      </p>
     </div>
   )
 }

@@ -1,11 +1,10 @@
-import Link from 'next/link'
+import { Container } from '@/components/Container/Container'
+import { StoriesWrapper } from '@/features/story/StoriesWrapper/StoriesWrapper'
 
 export default async function ProjectsPage() {
   return (
-    <div>
-      <p>
-        <Link href="/projects/new">New project</Link>
-      </p>
-    </div>
+    <Container>
+      <StoriesWrapper />
+    </Container>
   )
 }
