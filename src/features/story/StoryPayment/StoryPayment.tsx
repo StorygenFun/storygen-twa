@@ -52,7 +52,7 @@ export const StoryPayment: FC<Props> = ({ storyForPay, onClear, onError, onGener
         payment_date: new Date().toISOString(),
       })
     } catch (error) {
-      onError('Оплата не удалась, попробуйте снова.')
+      onError(t('StoryPage.paymentMessageDanger'))
       console.error(error)
     }
   }
@@ -67,9 +67,9 @@ export const StoryPayment: FC<Props> = ({ storyForPay, onClear, onError, onGener
       onOk={handlePay}
       onCancel={onClear}
     >
-      <p>{t('StoryPage.payModalText')}</p>
+      <p>{t('StoryPage.paymentModalText')}</p>
       <p>
-        {t('StoryPage.payModalCost')} - <b>{getReadableCost(cost)}</b>
+        {t('StoryPage.paymentModalCost')} - <b>{getReadableCost(cost)}</b>
       </p>
     </Modal>
   )
