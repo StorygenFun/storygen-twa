@@ -8,7 +8,7 @@ export default function ProjectPage({ params }: any) {
     <Container>
       <Story
         storyId={storyId}
-        siteUrl={process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:4480'}
+        siteUrl={process.env.NEXT_PUBLIC_BASE_URL || 'https://storygen.fun'}
         serviceWallet={process.env.NEXT_PUBLIC_SERVICE_WALLET}
       />
     </Container>

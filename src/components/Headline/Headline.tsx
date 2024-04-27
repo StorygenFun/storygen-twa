@@ -54,7 +54,7 @@ export const Headline: FC<PropsWithChildren> = () => {
           </li>
         </ul>
 
-        <WalletSection siteUrl={process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:4480'} />
+        <WalletSection siteUrl={process.env.NEXT_PUBLIC_BASE_URL || 'https://storygen.fun'} />
       </Container>
     </Header>
   )
