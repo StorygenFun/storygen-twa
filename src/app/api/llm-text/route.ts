@@ -2,16 +2,16 @@ import { NextRequest } from 'next/server'
 import { getClient } from '@/features/llm/constants'
 import { LLMTextModel } from '@/features/llm/types'
 
-export async function POST(req: NextRequest) {
+const fetchOpenAI = async (
+  systemMessage: string,
+  prompt: string,
+  model: LLMTextModel,
+  url?: string,
+) => {
   const key = process.env.NEXT_PUBLIC_TOGETHER_API_KEY
   if (!key) return Response.error()
 
-  const body = await req.json()
-
-  const { prompt, systemMessage, model } = body
-
-  const TOGETHER_AI_URL = 'https://api.together.xyz/v1'
-  const client = getClient(key, TOGETHER_AI_URL)
+  const client = getClient(key, url)
 
   if (!client) return Response.error()
 
@@ -35,4 +35,11 @@ export async function POST(req: NextRequest) {
     console.error(error)
     throw new Error(error.message)
   }
+}
+
+export async function POST(req: NextRequest) {
+  const body = await req.json()
+  const { prompt, systemMessage, model } = body
+
+  return fetchOpenAI(systemMessage, prompt, model, 'https://api.together.xyz/v1')
 }

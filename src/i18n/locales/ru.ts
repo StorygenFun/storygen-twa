@@ -8,6 +8,7 @@ const translation = {
     yourStories: 'Ваши истории',
     storiesLoading: 'Мы загружаем ваши истории, пожалуйста, подождите...',
     createNewStory: 'Создать новую историю',
+    removeStory: 'Вы уверены, что хотите удалить эту историю?',
     defaultTitle: 'Новая история',
     languageAnswer: 'Отвечай на Русском языке',
     prompt: 'Опишите вашу историю',

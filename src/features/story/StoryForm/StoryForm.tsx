@@ -19,7 +19,9 @@ export const StoryForm: FC<Props> = ({ story, onGenerate }) => {
   const { t } = useTranslation()
 
   const [prompt, setPrompt] = useState(story.prompt || '')
-  const [model, setModel] = useState<LLMTextModel>(story.model || LLMTextModel.Mistral8x7BInstruct)
+  const [model, setModel] = useState<LLMTextModel>(
+    story.model || LLMTextModel.Mixtral8x22BInstruct141B,
+  )
   const [scenesNum, setScenesNum] = useState<number>(story.scenesNum || 5)
   const [writer, setWriter] = useState<StoryWriter | string | undefined>(story.writer)
   const [genre, setGenre] = useState<StoryGenre | undefined>(story.genre)

@@ -60,13 +60,6 @@ export const Story: FC<StoryProps> = ({ storyId, siteUrl }) => {
     })
   }
 
-  const openSuccessNotification = (message: string, description?: string) => {
-    api.success({
-      message,
-      description,
-    })
-  }
-
   const handleUpdate = useCallback(
     (story: IStory) => {
       updateStory(story.id, story)
@@ -144,7 +137,6 @@ export const Story: FC<StoryProps> = ({ storyId, siteUrl }) => {
       await updateStory(story.id, {
         cover,
       })
-      openSuccessNotification('Cover generated')
     } catch (error) {
       openErrorNotification("Can't generate Image")
     } finally {

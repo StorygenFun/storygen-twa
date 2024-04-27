@@ -17,7 +17,9 @@ type Props = {
 export const StoryMetaForm: FC<Props> = ({ story, isGenerating, onGenerate }) => {
   const { t } = useTranslation()
 
-  const [model, setModel] = useState<LLMTextModel>(story.model || LLMTextModel.Mistral8x7BInstruct)
+  const [model, setModel] = useState<LLMTextModel>(
+    story.model || LLMTextModel.Mixtral8x22BInstruct141B,
+  )
 
   return (
     <div className={styles.meta}>

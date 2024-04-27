@@ -1,7 +1,10 @@
+'use client'
+
 import { FC } from 'react'
 import { DeleteOutlined, FileImageOutlined } from '@ant-design/icons'
-import { Button, Card } from 'antd'
+import { Button, Card, Popconfirm } from 'antd'
 import Link from 'next/link'
+import { useTranslation } from '@/i18n/client'
 import { UUID } from '../../../types/common'
 import { IStory } from '../type'
 import styles from './StoryCard.module.scss'
@@ -14,7 +17,9 @@ type Props = {
 }
 
 export const StoryCard: FC<Props> = ({ story, onDelete }) => {
+  const { t } = useTranslation()
   const updatedAt = new Date(story.updatedAt).toLocaleString()
+
   return (
     <Card
       className={styles.card}
@@ -33,12 +38,16 @@ export const StoryCard: FC<Props> = ({ story, onDelete }) => {
         </Link>
       }
       actions={[
-        <Button
-          key={1}
-          type="text"
-          icon={<DeleteOutlined />}
-          onClick={() => (onDelete ? onDelete(story.id) : {})}
-        />,
+        <div key={1}>{updatedAt}</div>,
+        <Popconfirm
+          key={2}
+          title={t('StoryPage.removeStory')}
+          onConfirm={() => (onDelete ? onDelete(story.id) : {})}
+          okText={t('actions.yes')}
+          cancelText={t('actions.no')}
+        >
+          <Button type="text" icon={<DeleteOutlined />} />
+        </Popconfirm>,
       ]}
       hoverable
     >
@@ -48,12 +57,7 @@ export const StoryCard: FC<Props> = ({ story, onDelete }) => {
             {story.title}
           </Link>
         }
-        description={
-          <>
-            <div>{story.description}</div>
-            <div>{updatedAt}</div>
-          </>
-        }
+        description={story.description}
       />
     </Card>
   )
