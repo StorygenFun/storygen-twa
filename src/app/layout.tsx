@@ -19,6 +19,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   const locale = getLocale()
+  console.log('siteUrl:', process.env.NEXT_PUBLIC_BASE_URL)
 
   return (
     <html lang={locale}>
