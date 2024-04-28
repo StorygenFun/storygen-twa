@@ -36,6 +36,7 @@ export const StoriesWrapper: FC = () => {
       summary_en: '',
       sceneIds: [],
       lang: currentLanguage,
+      isSimple: true,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     })

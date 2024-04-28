@@ -19,7 +19,9 @@ export const StoryCover: FC<Props> = ({ story, isGenerating, onGenerate }) => {
   const { t } = useTranslation()
   const [isChanging, setIsChanging] = useState(false)
   const [isStarted, setIsStarted] = useState(false)
-  const [imageModel, setImageModel] = useState<LLMImageModel>(LLMImageModel.RealisticVision)
+  const [imageModel, setImageModel] = useState<LLMImageModel>(
+    story.imageModel || LLMImageModel.Leonardo,
+  )
 
   const handleSubmit = () => {
     setIsChanging(false)
@@ -50,13 +52,7 @@ export const StoryCover: FC<Props> = ({ story, isGenerating, onGenerate }) => {
         <div className={styles.generator}>
           {isStarted ? (
             <div>
-              <Form
-                layout="vertical"
-                initialValues={{
-                  promptValue: prompt,
-                  imageModelValue: imageModel,
-                }}
-              >
+              <Form layout="vertical" initialValues={{ imageModelValue: imageModel }}>
                 <Form.Item name="imageModelValue">
                   <Select
                     style={{ width: 200 }}

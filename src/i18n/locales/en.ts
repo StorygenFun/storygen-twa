@@ -12,7 +12,9 @@ const translation = {
     defaultTitle: 'New Story',
     languageAnswer: 'Answer in English',
     prompt: 'Describe your story',
-    model: 'Model',
+    simpleMode: 'Simple generation mode',
+    textModel: 'Model for generation of text',
+    imageModel: 'Model for generation of cover',
     writerStyle: "Writer's style",
     writers: {
       murakami: 'Haruki Murakami',

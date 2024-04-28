@@ -1,4 +1,4 @@
-import { LLMTextModel } from '@/features/llm/types'
+import { LLMImageModel, LLMTextModel } from '@/features/llm/types'
 import { Language } from '@/features/localization/types'
 import { UUID } from '@/types/common'
 
@@ -38,11 +38,13 @@ export type StoryOptions = {
   systemMessage?: string
   prompt?: string
   textModel?: LLMTextModel
+  imageModel?: LLMImageModel
   lang?: Language
   scenesNum?: number
   writer?: StoryWriter | string
   genre?: StoryGenre
   audience?: StoryAudience
+  isSimple: boolean
 }
 
 export type IStory = StoryOptions & {

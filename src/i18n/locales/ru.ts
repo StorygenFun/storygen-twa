@@ -12,7 +12,9 @@ const translation = {
     defaultTitle: 'Новая история',
     languageAnswer: 'Отвечай на Русском языке',
     prompt: 'Опишите вашу историю',
-    model: 'Модель',
+    simpleMode: 'Простой режим генерации',
+    textModel: 'Модель для генерации текста',
+    imageModel: 'Модель для генерации обложки',
     writerStyle: 'Стиль автора',
     writers: {
       murakami: 'Харуки Мураками',

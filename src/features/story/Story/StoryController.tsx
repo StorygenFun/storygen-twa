@@ -140,6 +140,7 @@ export const Story: FC<StoryProps> = ({ storyId, siteUrl }) => {
 
     await updateStory(story.id, {
       cover: '',
+      imageModel,
     })
 
     try {
@@ -147,6 +148,7 @@ export const Story: FC<StoryProps> = ({ storyId, siteUrl }) => {
 
       await updateStory(story.id, {
         cover,
+        imageModel,
       })
     } catch (error) {
       openErrorNotification("Can't generate Image")

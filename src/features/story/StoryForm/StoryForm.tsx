@@ -1,11 +1,11 @@
 'use client'
 
 import { FC, useCallback, useState } from 'react'
-import { Button, Form, InputNumber, Select } from 'antd'
+import { Button, Form, InputNumber, Select, Switch } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import { ActionBar } from '@/components/ActionBar/ActionBar'
-import { LLMTextModelList } from '@/features/llm/constants'
-import { LLMTextModel } from '@/features/llm/types'
+import { LLMImageModelList, LLMTextModelList } from '@/features/llm/constants'
+import { LLMImageModel, LLMTextModel } from '@/features/llm/types'
 import { IStory, StoryAudience, StoryGenre, StoryOptions, StoryWriter } from '@/features/story/type'
 import {
   calculateStoryGenerationCost,
@@ -26,10 +26,14 @@ export const StoryForm: FC<Props> = ({ story, onGenerate }) => {
   const [textModel, setTextModel] = useState<LLMTextModel>(
     story.textModel || LLMTextModel.Mixtral8x22BInstruct141B,
   )
+  const [imageModel, setImageModel] = useState<LLMImageModel>(
+    story.imageModel || LLMImageModel.Leonardo,
+  )
   const [scenesNum, setScenesNum] = useState<number>(story.scenesNum || 5)
   const [writer, setWriter] = useState<StoryWriter | string | undefined>(story.writer)
   const [genre, setGenre] = useState<StoryGenre | undefined>(story.genre)
   const [audience, setAudience] = useState<StoryAudience | undefined>(story.audience)
+  const [isSimple, setIsSimple] = useState(story.isSimple)
 
   const buildOptions = (list: string[], translationPrefix: string) => {
     return list.map(item => {
@@ -50,12 +54,14 @@ export const StoryForm: FC<Props> = ({ story, onGenerate }) => {
     onGenerate({
       prompt,
       textModel,
+      imageModel,
       scenesNum,
       writer,
       genre,
       audience,
+      isSimple,
     })
-  }, [audience, genre, textModel, onGenerate, prompt, scenesNum, writer])
+  }, [prompt, onGenerate, textModel, imageModel, scenesNum, writer, genre, audience, isSimple])
 
   return (
     <div className={styles.storyForm}>
@@ -64,23 +70,44 @@ export const StoryForm: FC<Props> = ({ story, onGenerate }) => {
         initialValues={{
           promptValue: prompt,
           textModelValue: textModel,
+          imageModelValue: imageModel,
           scenesValue: scenesNum,
           writerValue: writer ? [writer] : [],
           genreValue: genre,
           audienceValue: audience,
+          isSimpleValue: isSimple,
         }}
       >
         <Form.Item label={t('StoryPage.prompt')} name="promptValue">
           <TextArea rows={5} value={prompt} onChange={e => setPrompt(e.target.value)} />
         </Form.Item>
 
-        <Form.Item label={t('StoryPage.textModel')} name="textModelValue">
-          <Select
-            style={{ width: 300 }}
-            options={Array.from(LLMTextModelList, ([value, label]) => ({ value, label }))}
-            onChange={val => setTextModel(val)}
-          />
+        <Form.Item name="isSimpleValue">
+          <div className={styles.switcherContainer}>
+            <Switch defaultChecked onChange={val => setIsSimple(val)} />
+            {t('StoryPage.simpleMode')}
+          </div>
         </Form.Item>
+
+        {!isSimple && (
+          <Form.Item label={t('StoryPage.textModel')} name="textModelValue">
+            <Select
+              style={{ width: 300 }}
+              options={Array.from(LLMTextModelList, ([value, label]) => ({ value, label }))}
+              onChange={val => setTextModel(val)}
+            />
+          </Form.Item>
+        )}
+
+        {!isSimple && (
+          <Form.Item label={t('StoryPage.imageModel')} name="imageModelValue">
+            <Select
+              style={{ width: 300 }}
+              options={Array.from(LLMImageModelList, ([value, label]) => ({ value, label }))}
+              onChange={val => setImageModel(val)}
+            />
+          </Form.Item>
+        )}
 
         <Form.Item label={t('StoryPage.writerStyle')} name="writerValue">
           <Select
