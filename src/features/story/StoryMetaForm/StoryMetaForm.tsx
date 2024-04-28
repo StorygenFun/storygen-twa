@@ -11,14 +11,14 @@ import styles from './StoryMetaForm.module.scss'
 type Props = {
   story: IStory
   isGenerating: boolean
-  onGenerate: (model: LLMTextModel) => void
+  onGenerate: (textModel: LLMTextModel) => void
 }
 
 export const StoryMetaForm: FC<Props> = ({ story, isGenerating, onGenerate }) => {
   const { t } = useTranslation()
 
-  const [model, setModel] = useState<LLMTextModel>(
-    story.model || LLMTextModel.Mixtral8x22BInstruct141B,
+  const [textModel, setTextModel] = useState<LLMTextModel>(
+    story.textModel || LLMTextModel.Mixtral8x22BInstruct141B,
   )
 
   return (
@@ -34,22 +34,22 @@ export const StoryMetaForm: FC<Props> = ({ story, isGenerating, onGenerate }) =>
             layout="vertical"
             initialValues={{
               promptValue: prompt,
-              modelValue: model,
+              textModelValue: textModel,
             }}
           >
             <Form.Item className={styles.field}>
-              <Button type="primary" onClick={() => onGenerate(model)}>
+              <Button type="primary" onClick={() => onGenerate(textModel)}>
                 {t('StoryPage.generateMetaData')}
               </Button>
             </Form.Item>
 
             <span>{t('StoryPage.generateWith')}</span>
 
-            <Form.Item name="modelValue" className={styles.field}>
+            <Form.Item name="textModelValue" className={styles.field}>
               <Select
                 style={{ width: 300 }}
                 options={Array.from(LLMTextModelList, ([value, label]) => ({ value, label }))}
-                onChange={val => setModel(val)}
+                onChange={val => setTextModel(val)}
               />
             </Form.Item>
           </Form>

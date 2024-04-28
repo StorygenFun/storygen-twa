@@ -37,7 +37,7 @@ export enum StoryAudience {
 export type StoryOptions = {
   systemMessage?: string
   prompt?: string
-  model?: LLMTextModel
+  textModel?: LLMTextModel
   lang?: Language
   scenesNum?: number
   writer?: StoryWriter | string

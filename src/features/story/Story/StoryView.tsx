@@ -30,8 +30,8 @@ type StoryProps = {
   onStoryGenerate: (story: IStory) => void
   onStoryCancel: () => void
   onScenesGenerate: () => void
-  onMetaGenerate: (model: LLMTextModel, context: string) => void
-  onCoverGenerate: (model: LLMImageModel) => void
+  onMetaGenerate: (textModel: LLMTextModel, context: string) => void
+  onCoverGenerate: (imageModel: LLMImageModel) => void
 }
 
 export const StoryView: FC<StoryProps> = ({
@@ -77,10 +77,10 @@ export const StoryView: FC<StoryProps> = ({
     [onStoryGenerate, onUpdate, story],
   )
 
-  const handleMetaGenerate = (model: LLMTextModel) => {
+  const handleMetaGenerate = (textModel: LLMTextModel) => {
     const context = scenesList.map(scene => scene.summary).join('\n')
     if (context) {
-      onMetaGenerate(model, context)
+      onMetaGenerate(textModel, context)
     }
   }
 

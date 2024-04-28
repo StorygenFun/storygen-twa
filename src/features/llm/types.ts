@@ -32,11 +32,11 @@ export enum LeonardoModel {
 export type LLMTextQuery = {
   prompt: string
   systemMessage?: string
-  model?: LLMTextModel
+  textModel?: LLMTextModel
   stream?: boolean
 }
 
 export type LLMImageQuery = {
   prompt: string
-  model?: LLMImageModel
+  imageModel?: LLMImageModel
 }

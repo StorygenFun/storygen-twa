@@ -12,18 +12,18 @@ import styles from './StoryCover.module.scss'
 type Props = {
   story: IStory
   isGenerating: boolean
-  onGenerate: (model: LLMImageModel) => void
+  onGenerate: (imageModel: LLMImageModel) => void
 }
 
 export const StoryCover: FC<Props> = ({ story, isGenerating, onGenerate }) => {
   const { t } = useTranslation()
   const [isChanging, setIsChanging] = useState(false)
   const [isStarted, setIsStarted] = useState(false)
-  const [model, setModel] = useState<LLMImageModel>(LLMImageModel.RealisticVision)
+  const [imageModel, setImageModel] = useState<LLMImageModel>(LLMImageModel.RealisticVision)
 
   const handleSubmit = () => {
     setIsChanging(false)
-    onGenerate(model)
+    onGenerate(imageModel)
   }
 
   if (isGenerating) {
@@ -54,14 +54,14 @@ export const StoryCover: FC<Props> = ({ story, isGenerating, onGenerate }) => {
                 layout="vertical"
                 initialValues={{
                   promptValue: prompt,
-                  modelValue: model,
+                  imageModelValue: imageModel,
                 }}
               >
-                <Form.Item name="modelValue">
+                <Form.Item name="imageModelValue">
                   <Select
                     style={{ width: 200 }}
                     options={Array.from(LLMImageModelList, ([value, label]) => ({ value, label }))}
-                    onChange={val => setModel(val)}
+                    onChange={val => setImageModel(val)}
                   />
                 </Form.Item>
 

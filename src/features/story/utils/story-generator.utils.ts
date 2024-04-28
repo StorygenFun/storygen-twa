@@ -40,7 +40,7 @@ export const preGenerateStory = async (updatedStory: IStory, t: Translation) => 
   const request: LLMTextQuery = {
     systemMessage,
     prompt: updatedStory.prompt,
-    model: updatedStory.model,
+    textModel: updatedStory.textModel,
   }
 
   clog('Request', JSON.stringify(request))
@@ -78,7 +78,7 @@ export const generateSceneContent = async (
     systemMessage,
     prompt: t('prompts.scenePrompt', { context }),
     lang: updatedStory.lang,
-    model: updatedStory.model,
+    textModel: updatedStory.textModel,
   }
 
   clog('Request', JSON.stringify(request))
@@ -91,7 +91,7 @@ export const generateSceneSummary = async (story: IStory, context: string, t: Tr
     systemMessage: t('prompts.sceneSummaryGenerator'),
     prompt: context,
     lang: story.lang,
-    model: story.model,
+    textModel: story.textModel,
   }
 
   clog('Request', JSON.stringify(request))
@@ -126,14 +126,14 @@ export const generateScenes = async (
 
 export const generateMeta = async (
   story: IStory,
-  model: LLMTextModel,
+  textModel: LLMTextModel,
   context: string,
   t: Translation,
 ) => {
   const request = {
     prompt: t('prompts.storySummaryGenerator', { context }),
     lang: story.lang,
-    model: model || story.model,
+    textModel: textModel || story.textModel,
   }
 
   clog('Request', JSON.stringify(request))
@@ -141,9 +141,9 @@ export const generateMeta = async (
   return await askTextLLM(request)
 }
 
-const generateWithOpenAIApi = async (story: IStory, model: LLMImageModel) => {
+const generateWithOpenAIApi = async (story: IStory, imageModel: LLMImageModel) => {
   const options: LLMImageQuery = {
-    model,
+    imageModel,
     prompt: story.cover_text_en || '',
   }
 
@@ -201,14 +201,14 @@ const generateWithLeonardo = async (story: IStory): Promise<string> => {
   }
 }
 
-export const generateCover = async (story: IStory, model: LLMImageModel) => {
+export const generateCover = async (story: IStory, imageModel: LLMImageModel) => {
   if (!story.cover_text_en) {
     throw new Error('Cover prompt is empty')
   }
 
-  if (model === LLMImageModel.Leonardo) {
+  if (imageModel === LLMImageModel.Leonardo) {
     return generateWithLeonardo(story)
   }
 
-  return generateWithOpenAIApi(story, model)
+  return generateWithOpenAIApi(story, imageModel)
 }

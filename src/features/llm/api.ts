@@ -3,7 +3,7 @@ import { clog } from '@/utils/common.utils'
 import { LLMImageModel, LLMImageQuery, LLMTextModel, LLMTextQuery } from './types'
 
 export const askTextLLM = async (options: LLMTextQuery) => {
-  const { systemMessage, prompt, model, stream } = options
+  const { systemMessage, prompt, textModel, stream } = options
 
   if (!prompt) {
     throw new Error('Prompt to be defined')
@@ -18,7 +18,7 @@ export const askTextLLM = async (options: LLMTextQuery) => {
     const { data } = await axios.post('/api/llm-text', {
       systemMessage: systemMessage || '',
       prompt,
-      model: model || LLMTextModel.LLaMA3Chat70B,
+      textModel: textModel || LLMTextModel.LLaMA3Chat70B,
       stream,
     })
 
@@ -31,7 +31,7 @@ export const askTextLLM = async (options: LLMTextQuery) => {
 }
 
 export const askImageLLM = async (options: LLMImageQuery) => {
-  const { prompt, model } = options
+  const { prompt, imageModel } = options
 
   if (!prompt) {
     throw new Error('Prompt to be defined')
@@ -42,7 +42,7 @@ export const askImageLLM = async (options: LLMImageQuery) => {
   try {
     const { data } = await axios.post('/api/llm-image', {
       prompt,
-      model: model || LLMImageModel.RealisticVision,
+      imageModel: imageModel || LLMImageModel.RealisticVision,
     })
 
     return data[0]

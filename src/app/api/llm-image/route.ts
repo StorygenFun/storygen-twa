@@ -6,7 +6,7 @@ import { LLMImageModel } from '@/features/llm/types'
 
 const fetchOpenAI = async (
   prompt: string,
-  model: LLMImageModel,
+  imageModel: LLMImageModel,
   url?: string,
 ): Promise<Response> => {
   const key = process.env.NEXT_PUBLIC_TOGETHER_API_KEY
@@ -18,7 +18,7 @@ const fetchOpenAI = async (
   try {
     const response = await client.images.generate({
       prompt: prompt,
-      model: model,
+      model: imageModel,
     })
 
     return new Response(JSON.stringify(response.data), {
@@ -67,11 +67,11 @@ const fetchStabilityDiffusionResponse = async (prompt: string): Promise<Response
 
 export async function POST(req: NextRequest): Promise<Response> {
   const body = await req.json()
-  const { prompt, model } = body
+  const { prompt, imageModel } = body
 
-  if (model === LLMImageModel.StabilityDiffusion3Turbo) {
+  if (imageModel === LLMImageModel.StabilityDiffusion3Turbo) {
     return fetchStabilityDiffusionResponse(prompt)
   }
 
-  return fetchOpenAI(prompt, model, 'https://api.together.xyz/v1')
+  return fetchOpenAI(prompt, imageModel, 'https://api.together.xyz/v1')
 }

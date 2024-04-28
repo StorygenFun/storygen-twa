@@ -103,12 +103,12 @@ export const Story: FC<StoryProps> = ({ storyId, siteUrl }) => {
     await updateStory(story.id, { ...story, sceneIds: scenes.map(item => item.id) })
   }
 
-  const handleMetaGenerate = async (model: LLMTextModel, context: string) => {
+  const handleMetaGenerate = async (textModel: LLMTextModel, context: string) => {
     if (!story) return
 
     setIsMetaGenerating(true)
 
-    const result = await generateMeta(story, model, context, t)
+    const result = await generateMeta(story, textModel, context, t)
 
     if (result) {
       const resJSON = extractObjectFromString(result)
@@ -133,7 +133,7 @@ export const Story: FC<StoryProps> = ({ storyId, siteUrl }) => {
     return result
   }
 
-  const handleCoverGenerate = async (model: LLMImageModel) => {
+  const handleCoverGenerate = async (imageModel: LLMImageModel) => {
     if (!story?.cover_text_en) return
 
     setIsCoverGenerating(true)
@@ -143,7 +143,7 @@ export const Story: FC<StoryProps> = ({ storyId, siteUrl }) => {
     })
 
     try {
-      const cover = await generateCover(story, model)
+      const cover = await generateCover(story, imageModel)
 
       await updateStory(story.id, {
         cover,

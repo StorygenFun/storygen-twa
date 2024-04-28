@@ -11,7 +11,7 @@ export const OpenAiConnector: FC = () => {
     return await askTextLLM({
       prompt: 'Hello, world!',
       systemMessage: 'You are a mega-robot.',
-      model: LLMTextModel.LLaMA3Chat70B,
+      textModel: LLMTextModel.LLaMA3Chat70B,
     })
   }
 

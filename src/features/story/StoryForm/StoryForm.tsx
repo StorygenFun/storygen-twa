@@ -23,8 +23,8 @@ export const StoryForm: FC<Props> = ({ story, onGenerate }) => {
   const { t } = useTranslation()
 
   const [prompt, setPrompt] = useState(story.prompt || '')
-  const [model, setModel] = useState<LLMTextModel>(
-    story.model || LLMTextModel.Mixtral8x22BInstruct141B,
+  const [textModel, setTextModel] = useState<LLMTextModel>(
+    story.textModel || LLMTextModel.Mixtral8x22BInstruct141B,
   )
   const [scenesNum, setScenesNum] = useState<number>(story.scenesNum || 5)
   const [writer, setWriter] = useState<StoryWriter | string | undefined>(story.writer)
@@ -49,13 +49,13 @@ export const StoryForm: FC<Props> = ({ story, onGenerate }) => {
     if (!prompt) return
     onGenerate({
       prompt,
-      model,
+      textModel,
       scenesNum,
       writer,
       genre,
       audience,
     })
-  }, [audience, genre, model, onGenerate, prompt, scenesNum, writer])
+  }, [audience, genre, textModel, onGenerate, prompt, scenesNum, writer])
 
   return (
     <div className={styles.storyForm}>
@@ -63,7 +63,7 @@ export const StoryForm: FC<Props> = ({ story, onGenerate }) => {
         layout="vertical"
         initialValues={{
           promptValue: prompt,
-          modelValue: model,
+          textModelValue: textModel,
           scenesValue: scenesNum,
           writerValue: writer ? [writer] : [],
           genreValue: genre,
@@ -74,11 +74,11 @@ export const StoryForm: FC<Props> = ({ story, onGenerate }) => {
           <TextArea rows={5} value={prompt} onChange={e => setPrompt(e.target.value)} />
         </Form.Item>
 
-        <Form.Item label={t('StoryPage.model')} name="modelValue">
+        <Form.Item label={t('StoryPage.textModel')} name="textModelValue">
           <Select
             style={{ width: 300 }}
             options={Array.from(LLMTextModelList, ([value, label]) => ({ value, label }))}
-            onChange={val => setModel(val)}
+            onChange={val => setTextModel(val)}
           />
         </Form.Item>
 

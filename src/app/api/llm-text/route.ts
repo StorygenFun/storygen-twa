@@ -5,7 +5,7 @@ import { LLMTextModel } from '@/features/llm/types'
 const fetchOpenAI = async (
   systemMessage: string,
   prompt: string,
-  model: LLMTextModel,
+  textModel: LLMTextModel,
   url?: string,
 ): Promise<Response> => {
   const key = process.env.NEXT_PUBLIC_TOGETHER_API_KEY
@@ -34,7 +34,7 @@ const fetchOpenAI = async (
           content: prompt || '',
         },
       ],
-      model: model || LLMTextModel.LLaMA3Chat70B,
+      model: textModel || LLMTextModel.LLaMA3Chat70B,
     })
 
     return Response.json(response.choices[0].message.content?.trim())
@@ -49,7 +49,7 @@ const fetchOpenAI = async (
 
 export async function POST(req: NextRequest): Promise<Response> {
   const body = await req.json()
-  const { systemMessage, prompt, model } = body
+  const { systemMessage, prompt, textModel } = body
 
-  return fetchOpenAI(systemMessage, prompt, model, 'https://api.together.xyz/v1')
+  return fetchOpenAI(systemMessage, prompt, textModel, 'https://api.together.xyz/v1')
 }
