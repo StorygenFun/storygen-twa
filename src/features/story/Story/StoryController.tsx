@@ -2,12 +2,17 @@
 
 import { FC, useMemo, useState } from 'react'
 import { notification } from 'antd'
+import { v4 as uuidv4 } from 'uuid'
 import { Spinner } from '@/components/Spinner/Spinner'
 import { StepProgress } from '@/components/StepProgress/StepProgress'
 import { DEFAULT_IMAGE_MODEL, DEFAULT_TEXT_MODEL } from '@/features/llm/constants'
 import { useSceneStore } from '@/features/scene/sceneStore'
 import { IScene } from '@/features/scene/type'
-import { extractObjectFromString, formatBrief } from '@/features/story/utils/story.utils'
+import {
+  buildScenePrompt,
+  extractObjectFromString,
+  formatBrief,
+} from '@/features/story/utils/story.utils'
 import { useTranslation } from '@/i18n/client'
 import { StoryPayment } from '../StoryPayment/StoryPayment'
 import { StoryWrapper } from '../StoryWrapper/StoryWrapper'
@@ -17,7 +22,8 @@ import { GenerationStep, IStory } from '../type'
 import {
   generateCover,
   generateMeta,
-  generateScenes,
+  generateSceneContent,
+  generateSceneSummary,
   preGenerateStory,
 } from '../utils/story-generator.utils'
 import { StoryView } from './StoryView'
@@ -32,9 +38,8 @@ export const Story: FC<StoryProps> = ({ storyId, siteUrl }) => {
   const { t } = useTranslation()
 
   useFetchAllStories()
-  const { currentStep, isStoriesLoading, getStoryById, changeCurrentStep, updateStory } =
-    useStoryStore()
-  const { createScene, getScenesByIds, generatedScene } = useSceneStore()
+  const { isStoriesLoading, getStoryById, changeCurrentStep, updateStory } = useStoryStore()
+  const { createScene, getScenesByIds, updateScene, generatedScene } = useSceneStore()
 
   const initialStory = getStoryById(storyId)
 
@@ -137,15 +142,29 @@ export const Story: FC<StoryProps> = ({ storyId, siteUrl }) => {
     changeCurrentStep(GenerationStep.Scenes)
     if (!currentStory.brief) return
 
-    const scenes = await generateScenes(currentStory, formatBrief(currentStory.brief), t)
+    const formattedBrief = formatBrief(currentStory.brief)
+    let updatedStory = { ...currentStory }
 
-    for (const scene of scenes) {
-      await createScene(scene)
+    for (let i = 0; i < formatBrief(currentStory.brief).length; i++) {
+      const context = buildScenePrompt(formattedBrief, i + 1, t)
+      const content = await generateSceneContent(currentStory, context, t)
+
+      if (content) {
+        const scene: IScene = {
+          id: uuidv4(),
+          title: formattedBrief[i].t,
+          content,
+        }
+        await createScene(scene)
+        updatedStory = { ...updatedStory, sceneIds: [...updatedStory.sceneIds, scene.id] }
+        await updateStory(updatedStory.id, updatedStory)
+        const summary = await generateSceneSummary(currentStory, content, t)
+        scene.summary = summary
+        if (summary) {
+          await updateScene(scene.id, scene)
+        }
+      }
     }
-
-    const updatedStory = { ...currentStory, sceneIds: scenes.map(item => item.id) }
-
-    await updateStory(updatedStory.id, updatedStory)
 
     if (updatedStory.textModel && updatedStory.isSimple) {
       handleMetaGenerate(updatedStory, scenesList)
@@ -185,7 +204,6 @@ export const Story: FC<StoryProps> = ({ storyId, siteUrl }) => {
 
   return (
     <>
-      {currentStep}
       <StepProgress total={5} current={progressStep} />
 
       <StoryWrapper siteUrl={siteUrl}>

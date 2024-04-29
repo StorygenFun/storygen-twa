@@ -1,9 +1,7 @@
 import axios from 'axios'
-import { v4 as uuidv4 } from 'uuid'
 import { Translation } from '@/features/localization/types'
 import { IScene } from '@/features/scene/type'
 import {
-  buildScenePrompt,
   getAudienceText,
   getGenreText,
   getNewStoryTaskText,
@@ -12,7 +10,7 @@ import {
 import { clog } from '@/utils/common.utils'
 import { askImageLLM, askTextLLM } from '../../llm/api'
 import { LLMImageModel, LLMImageQuery, LLMTextModel, LLMTextQuery } from '../../llm/types'
-import { CompactShortScene, IStory } from '../type'
+import { IStory } from '../type'
 
 export const PROMPT_SIZE = 2000
 
@@ -56,7 +54,7 @@ export const generateSceneContent = async (
   updatedStory: IStory,
   context: string,
   t: Translation,
-) => {
+): Promise<IScene['content']> => {
   const systemMessageSize = 300
 
   const systemMessage = [
@@ -97,31 +95,6 @@ export const generateSceneSummary = async (story: IStory, context: string, t: Tr
   clog('Request', JSON.stringify(request))
 
   return await askTextLLM(request)
-}
-
-export const generateScenes = async (
-  story: IStory,
-  formattedBrief: CompactShortScene[],
-  t: Translation,
-) => {
-  const scenes: IScene[] = []
-
-  for (let i = 0; i < formattedBrief.length; i++) {
-    const context = buildScenePrompt(story, formattedBrief, i)
-    const content = await generateSceneContent(story, context, t)
-    if (content) {
-      const summary = await generateSceneSummary(story, content, t)
-      const scene: IScene = {
-        id: uuidv4(),
-        title: formattedBrief[i].t,
-        content,
-        summary: summary ? summary : undefined,
-      }
-      scenes.push(scene)
-    }
-  }
-
-  return scenes
 }
 
 export const generateMeta = async (

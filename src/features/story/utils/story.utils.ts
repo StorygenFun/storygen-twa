@@ -1,4 +1,4 @@
-import { Language, Translation } from '@/features/localization/types'
+import { Translation } from '@/features/localization/types'
 import { CompactShortScene, IStory } from '@/features/story/type'
 
 export const getWriterStyleText = (story: IStory, t: Translation) => {
@@ -28,15 +28,12 @@ export const getNewStoryTaskText = (story: IStory, t: Translation) => {
 }
 
 export const buildScenePrompt = (
-  story: IStory,
   brief: CompactShortScene[],
   num: number,
+  t: Translation,
 ): string => {
-  const prefix = story.lang === Language.RU ? 'Эпизод' : 'Scene'
-  const config =
-    story.lang === Language.RU
-      ? `Максимально подробно напиши эпизод №${num + 1}`
-      : `Write episode number ${num + 1} in as much detail as possible`
+  const prefix = t('prompts.sceneTitlePrefix')
+  const config = t('prompts.sceneWrite', { num })
   const content = brief
     .map((scene, index) => `${prefix} ${index + 1}: ${scene.t}\n${scene.d}\n\n`)
     .join('')

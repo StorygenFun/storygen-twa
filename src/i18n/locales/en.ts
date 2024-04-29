@@ -87,6 +87,8 @@ The size of each description is about {{size}} characters.
 Send a complete list of all {{num}} episodes without abbreviations or omissions.
 There should be nothing in the response except this JSON.`,
     },
+    sceneTitlePrefix: 'Scene',
+    sceneWrite: 'Write episode number {{num}} in as much detail as possible',
     sceneGenerator: `The response should contain only the episode and nothing more. The size of the episode is about {{size}} characters. Do not number the episodes.`,
     scenePrompt: `Write a separate episode of the story based on this brief description:\n\n{{context}}`,
     sceneSummaryGenerator: `Write a summary of the story from 300 to 500 characters. The response should contain only the summary and nothing more.`,
