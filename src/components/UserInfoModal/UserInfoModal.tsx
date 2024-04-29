@@ -1,7 +1,7 @@
 'use client'
 
 import { FC } from 'react'
-import { MessageOutlined, WalletOutlined } from '@ant-design/icons'
+import { MessageOutlined, WalletOutlined, WarningOutlined } from '@ant-design/icons'
 import { Button, List, Modal, Popconfirm, Switch } from 'antd'
 import { useWalletStore } from '@/features/wallet/walletStore'
 import { useTranslation } from '@/i18n/client'
@@ -37,7 +37,11 @@ export const UserInfoModal: FC<Props> = ({ isOpen, walletAddress, onLogout, onCl
           <Switch defaultChecked={isDebugMode} onChange={val => changeDebugMode(val)} />
         </div>
       ),
-      icon: <MessageOutlined />,
+      icon: (
+        <span style={{ color: '#ff4d4f' }}>
+          <WarningOutlined />
+        </span>
+      ),
     },
   ]
 

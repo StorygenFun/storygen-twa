@@ -4,6 +4,7 @@ import { FC, useState } from 'react'
 import { Button, Form, Select, Spin } from 'antd'
 import { LLMTextModelList } from '@/features/llm/constants'
 import { LLMTextModel } from '@/features/llm/types'
+import { useWalletStore } from '@/features/wallet/walletStore'
 import { useTranslation } from '@/i18n/client'
 import { IStory } from '../type'
 import styles from './StoryMetaForm.module.scss'
@@ -16,6 +17,7 @@ type Props = {
 
 export const StoryMetaForm: FC<Props> = ({ story, isGenerating, onGenerate }) => {
   const { t } = useTranslation()
+  const { isDebugMode } = useWalletStore()
 
   const [textModel, setTextModel] = useState<LLMTextModel>(
     story.textModel || LLMTextModel.Mixtral8x22BInstruct141B,
@@ -43,15 +45,17 @@ export const StoryMetaForm: FC<Props> = ({ story, isGenerating, onGenerate }) =>
               </Button>
             </Form.Item>
 
-            <span>{t('StoryPage.generateWith')}</span>
+            {isDebugMode && <span>{t('StoryPage.generateWith')}</span>}
 
-            <Form.Item name="textModelValue" className={styles.field}>
-              <Select
-                style={{ width: 300 }}
-                options={Array.from(LLMTextModelList, ([value, label]) => ({ value, label }))}
-                onChange={val => setTextModel(val)}
-              />
-            </Form.Item>
+            {isDebugMode && (
+              <Form.Item name="textModelValue" className={styles.field}>
+                <Select
+                  style={{ width: 300 }}
+                  options={Array.from(LLMTextModelList, ([value, label]) => ({ value, label }))}
+                  onChange={val => setTextModel(val)}
+                />
+              </Form.Item>
+            )}
           </Form>
         </div>
       )}

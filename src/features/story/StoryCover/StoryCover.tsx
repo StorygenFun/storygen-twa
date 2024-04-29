@@ -5,6 +5,7 @@ import { DeleteOutlined } from '@ant-design/icons'
 import { Button, Form, Select, Spin } from 'antd'
 import { LLMImageModelList } from '@/features/llm/constants'
 import { LLMImageModel } from '@/features/llm/types'
+import { useWalletStore } from '@/features/wallet/walletStore'
 import { useTranslation } from '@/i18n/client'
 import { IStory } from '../type'
 import styles from './StoryCover.module.scss'
@@ -17,6 +18,8 @@ type Props = {
 
 export const StoryCover: FC<Props> = ({ story, isGenerating, onGenerate }) => {
   const { t } = useTranslation()
+  const { isDebugMode } = useWalletStore()
+
   const [isChanging, setIsChanging] = useState(false)
   const [isStarted, setIsStarted] = useState(false)
   const [imageModel, setImageModel] = useState<LLMImageModel>(
@@ -42,11 +45,13 @@ export const StoryCover: FC<Props> = ({ story, isGenerating, onGenerate }) => {
         <div className={styles.poster}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={story.cover} alt="" className={styles.image} />
-          <Button
-            className={styles.clear}
-            icon={<DeleteOutlined />}
-            onClick={() => setIsChanging(true)}
-          />
+          {isDebugMode && (
+            <Button
+              className={styles.clear}
+              icon={<DeleteOutlined />}
+              onClick={() => setIsChanging(true)}
+            />
+          )}
         </div>
       ) : (
         <div className={styles.generator}>

@@ -13,7 +13,7 @@ import { StoryCover } from '@/features/story/StoryCover/StoryCover'
 import { StoryForm } from '@/features/story/StoryForm/StoryForm'
 import { StoryMeta } from '@/features/story/StoryMeta/StoryMeta'
 import { StoryMetaForm } from '@/features/story/StoryMetaForm/StoryMetaForm'
-import { StoryScenesActions } from '@/features/story/StoryScenesActions/StoryScenesActions'
+import { useWalletStore } from '@/features/wallet/walletStore'
 import { IStory, StoryOptions } from '../type'
 import { formatBrief } from '../utils/story.utils'
 import styles from './Story.module.scss'
@@ -27,7 +27,6 @@ type StoryProps = {
   isCoverGenerating: boolean
   scenesList: IScene[] | undefined
   onChangeTitle: (title: string) => void
-  onClearStory: () => void
   onGenerateStart: (options: StoryOptions) => void
   onGenerateScenes: () => void
   onGenerateMeta: (textModel: LLMTextModel) => void
@@ -44,12 +43,12 @@ export const StoryView: FC<StoryProps> = ({
   scenesList,
   onChangeTitle,
   onGenerateStart,
-  onClearStory,
   onGenerateScenes,
   onGenerateMeta,
   onGenerateCover,
 }) => {
   const formattedBrief = story?.brief ? formatBrief(story?.brief) : null
+  const { isDebugMode } = useWalletStore()
 
   const NameSelector = () => {
     if (!story.names?.length) return null
@@ -80,18 +79,23 @@ export const StoryView: FC<StoryProps> = ({
 
   return (
     <article className={styles.story}>
-      <Heading isCentered title={story.title} onChange={onChangeTitle} actions={<NameSelector />} />
+      {isDebugMode ? (
+        <Heading
+          isCentered
+          title={story.title}
+          onChange={onChangeTitle}
+          actions={<NameSelector />}
+        />
+      ) : (
+        <Heading isCentered title={story.title} />
+      )}
 
       {!scenesList?.length && !isStoryGenerating ? (
         <div className={styles.content}>
           {!formattedBrief ? (
             <StoryForm story={story} onGenerate={onGenerateStart} />
           ) : (
-            <StoryBrief
-              brief={formattedBrief}
-              onCancel={onClearStory}
-              onGenerate={onGenerateScenes}
-            />
+            <StoryBrief brief={formattedBrief} onGenerate={onGenerateScenes} />
           )}
         </div>
       ) : (
@@ -118,7 +122,7 @@ export const StoryView: FC<StoryProps> = ({
 
           {!isStoryGenerating && (
             <ActionBar
-              actionStart={
+              actionEnd={
                 !story.summary && (
                   <StoryMetaForm
                     story={story}
@@ -126,9 +130,6 @@ export const StoryView: FC<StoryProps> = ({
                     onGenerate={onGenerateMeta}
                   />
                 )
-              }
-              actionEnd={
-                story.scenesNum === story.sceneIds.length && <StoryScenesActions story={story} />
               }
             />
           )}

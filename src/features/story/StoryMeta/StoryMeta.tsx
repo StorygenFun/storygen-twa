@@ -1,10 +1,6 @@
 'use client'
 
 import { FC } from 'react'
-import { DeleteOutlined } from '@ant-design/icons'
-import { Button } from 'antd'
-import { useTranslation } from '@/i18n/client'
-import { useStoryStore } from '../storyStore'
 import { IStory } from '../type'
 import styles from './StoryMeta.module.scss'
 
@@ -14,21 +10,6 @@ type Props = {
 }
 
 export const StoryMeta: FC<Props> = ({ story }) => {
-  const { t } = useTranslation()
-  const { updateStory } = useStoryStore()
-
-  const handleRemoveMeta = async () => {
-    const update = {
-      ...story,
-      names: [],
-      description: '',
-      summary: '',
-    }
-
-    await updateStory(story.id, update)
-    console.log('updateStory handleRemoveMeta')
-  }
-
   return (
     <div className={styles.meta}>
       <div className={styles.poster}>
@@ -36,12 +17,6 @@ export const StoryMeta: FC<Props> = ({ story }) => {
         <p>
           <q className={styles.quote}>{story.summary}</q>
         </p>
-      </div>
-
-      <div className={styles.actions}>
-        <Button danger icon={<DeleteOutlined />} onClick={handleRemoveMeta}>
-          {t('StoryPage.removeMetaData')}
-        </Button>
       </div>
     </div>
   )

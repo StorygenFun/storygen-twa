@@ -222,7 +222,6 @@ export const Story: FC<StoryProps> = ({ storyId, siteUrl }) => {
             handleMetaGenerate({ ...initialStory, textModel }, scenesList)
           }
           onGenerateCover={imageModel => handleCoverGenerate({ ...initialStory, imageModel })}
-          onClearStory={() => updateStory(initialStory.id, { ...initialStory, brief: '' })}
         />
 
         <StoryPayment

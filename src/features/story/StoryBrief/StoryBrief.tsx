@@ -1,7 +1,7 @@
 'use client'
 
 import { FC } from 'react'
-import { Button, Popconfirm, Result } from 'antd'
+import { Button, Result } from 'antd'
 import { ActionBar } from '@/components/ActionBar/ActionBar'
 import { useTranslation } from '@/i18n/client'
 import { CompactShortScene } from '../type'
@@ -9,11 +9,10 @@ import styles from './StoryBrief.module.scss'
 
 type Props = {
   brief: CompactShortScene[]
-  onCancel: () => void
   onGenerate: () => void
 }
 
-export const StoryBrief: FC<Props> = ({ brief, onCancel, onGenerate }) => {
+export const StoryBrief: FC<Props> = ({ brief, onGenerate }) => {
   const { t } = useTranslation()
 
   const isWrongFormat = !Array.isArray(brief)
@@ -44,16 +43,6 @@ export const StoryBrief: FC<Props> = ({ brief, onCancel, onGenerate }) => {
       )}
 
       <ActionBar
-        actionStart={
-          <Popconfirm
-            title={t('StoryPage.removeScenesQuestion')}
-            onConfirm={onCancel}
-            okText={t('actions.yes')}
-            cancelText={t('actions.no')}
-          >
-            <Button danger>{t('StoryPage.regenerate')}</Button>
-          </Popconfirm>
-        }
         actionEnd={
           <Button type="primary" onClick={onGenerate}>
             {t('StoryPage.generateFullStory')}
