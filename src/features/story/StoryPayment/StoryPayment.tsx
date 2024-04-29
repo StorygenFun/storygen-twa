@@ -45,7 +45,6 @@ export const StoryPayment: FC<Props> = ({ storyForPay, onClear, onError, onGener
 
     try {
       const response = await tonConnectUI.sendTransaction(transaction)
-      console.log('🚀 ~ handleStartPayment ~ response:', response)
       onGenerate({
         ...storyForPay,
         payment_transaction: response.boc,

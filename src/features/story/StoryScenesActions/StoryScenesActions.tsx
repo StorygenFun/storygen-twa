@@ -29,6 +29,7 @@ export const StoryScenesActions: FC<Props> = ({ story }) => {
     }
 
     await updateStory(story.id, update)
+    console.log('updateStory removeScenes')
   }
 
   return (

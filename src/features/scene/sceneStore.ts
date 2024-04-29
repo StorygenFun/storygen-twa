@@ -15,6 +15,7 @@ type SceneState = {
   updateGeneratedScene: (text: string | null) => void
   getAllScenes: () => IScene[]
   getSceneById: (id?: UUID | null) => IScene | null
+  getScenesByIds: (ids: UUID[]) => IScene[]
 }
 
 export const useSceneStore = create<SceneState>()(
@@ -96,6 +97,11 @@ export const useSceneStore = create<SceneState>()(
       if (!sceneId) return null
       const { scenes } = get()
       return scenes.find(scene => scene.id === sceneId) || null
+    },
+    getScenesByIds: scenesIds => {
+      if (!scenesIds.length) return []
+      const { scenes } = get()
+      return scenes.filter(scene => scenesIds.includes(scene.id))
     },
   })),
 )

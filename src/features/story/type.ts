@@ -57,7 +57,7 @@ export type IStory = StoryOptions & {
   cover?: string
   cover_text?: string
   cover_text_en?: string
-  response?: string
+  brief?: string
   names?: string[]
   payment_transaction?: string
   payment_date?: string
@@ -73,4 +73,11 @@ export type ShortScene = {
 export type CompactShortScene = {
   t: string
   d: string
+}
+
+export enum GenerationStep {
+  Brief = 'brief',
+  Scenes = 'scenes',
+  Meta = 'meta',
+  Cover = 'cover',
 }

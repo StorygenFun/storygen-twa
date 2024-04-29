@@ -2,16 +2,18 @@ import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
 import { clearDatabase, localDB } from '@/libs/dexie/db'
 import { UUID } from '@/types/common'
-import { IStory } from './type'
+import { GenerationStep, IStory } from './type'
 
 type StoryState = {
   isStoriesLoading: boolean
   stories: IStory[]
+  currentStep: GenerationStep | null
   fetchAllStories: () => Promise<IStory[] | undefined>
   fetchStoryById: (id: UUID) => Promise<IStory | undefined>
   createStory: (story: IStory) => Promise<IStory | undefined>
   updateStory: (id: UUID, updatedFields: Partial<IStory>) => void
   deleteStory: (id: UUID) => void
+  changeCurrentStep: (step: GenerationStep) => void
   getAllStories: () => IStory[]
   getStoryById: (id?: UUID | null) => IStory | null
   clearDB: () => void
@@ -21,6 +23,7 @@ export const useStoryStore = create<StoryState>()(
   devtools((set, get) => ({
     isStoriesLoading: true,
     stories: [],
+    currentStep: null,
     fetchAllStories: async () => {
       set({ isStoriesLoading: true })
       try {
@@ -89,6 +92,9 @@ export const useStoryStore = create<StoryState>()(
       } catch (err) {
         console.error('deleteStory:', err)
       }
+    },
+    changeCurrentStep: async (step: GenerationStep) => {
+      set({ currentStep: step })
     },
     getAllStories: () => {
       const { stories } = get()

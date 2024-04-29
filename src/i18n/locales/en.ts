@@ -118,10 +118,13 @@ storyTitles - an array of 10 story titles.
     cancel: 'Cancel',
     yes: 'Yes',
     no: 'No',
+    close: 'Close',
     pay: 'Pay',
     clearDatabase: 'Clear Database',
   },
   notices: {
+    connectRequiredTitle: 'You are not authorized',
+    connectRequiredText: 'To generate story, you must log in with TON Connect.',
     createStory: 'Create your new story',
     deleteDB: 'Are you sure to clear your local database?',
     deleteDBDescription: 'Once the database is deleted, you cannot undo this action',

@@ -1,17 +1,26 @@
 'use client'
 
-import { FC, useCallback, useState } from 'react'
-import { Button, Form, InputNumber, Select, Switch } from 'antd'
+import { FC, useCallback, useEffect, useState } from 'react'
+import { Alert, Button, Form, InputNumber, Select, Switch } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import { ActionBar } from '@/components/ActionBar/ActionBar'
 import { LLMImageModelList, LLMTextModelList } from '@/features/llm/constants'
 import { LLMImageModel, LLMTextModel } from '@/features/llm/types'
-import { IStory, StoryAudience, StoryGenre, StoryOptions, StoryWriter } from '@/features/story/type'
+import {
+  GenerationStep,
+  IStory,
+  StoryAudience,
+  StoryGenre,
+  StoryOptions,
+  StoryWriter,
+} from '@/features/story/type'
 import {
   calculateStoryGenerationCost,
   getReadableCost,
 } from '@/features/wallet/utils/payment.utils'
+import { useWalletStore } from '@/features/wallet/walletStore'
 import { useTranslation } from '@/i18n/client'
+import { useStoryStore } from '../storyStore'
 import styles from './StoryForm.module.scss'
 
 type Props = {
@@ -21,6 +30,8 @@ type Props = {
 
 export const StoryForm: FC<Props> = ({ story, onGenerate }) => {
   const { t } = useTranslation()
+  const { changeCurrentStep } = useStoryStore()
+  const { walletAddress } = useWalletStore()
 
   const [prompt, setPrompt] = useState(story.prompt || '')
   const [textModel, setTextModel] = useState<LLMTextModel>(
@@ -33,7 +44,11 @@ export const StoryForm: FC<Props> = ({ story, onGenerate }) => {
   const [writer, setWriter] = useState<StoryWriter | string | undefined>(story.writer)
   const [genre, setGenre] = useState<StoryGenre | undefined>(story.genre)
   const [audience, setAudience] = useState<StoryAudience | undefined>(story.audience)
-  const [isSimple, setIsSimple] = useState(story.isSimple)
+  const [isSimple, setIsSimple] = useState(!!story.isSimple)
+
+  useEffect(() => {
+    changeCurrentStep(GenerationStep.Brief)
+  }, [changeCurrentStep])
 
   const buildOptions = (list: string[], translationPrefix: string) => {
     return list.map(item => {
@@ -51,6 +66,12 @@ export const StoryForm: FC<Props> = ({ story, onGenerate }) => {
 
   const handleSubmit = useCallback(async () => {
     if (!prompt) return
+
+    if (!walletAddress) {
+      console.log('!!!!!!!')
+      return
+    }
+
     onGenerate({
       prompt,
       textModel,
@@ -61,7 +82,18 @@ export const StoryForm: FC<Props> = ({ story, onGenerate }) => {
       audience,
       isSimple,
     })
-  }, [prompt, onGenerate, textModel, imageModel, scenesNum, writer, genre, audience, isSimple])
+  }, [
+    prompt,
+    walletAddress,
+    onGenerate,
+    textModel,
+    imageModel,
+    scenesNum,
+    writer,
+    genre,
+    audience,
+    isSimple,
+  ])
 
   return (
     <div className={styles.storyForm}>
@@ -84,7 +116,7 @@ export const StoryForm: FC<Props> = ({ story, onGenerate }) => {
 
         <Form.Item name="isSimpleValue">
           <div className={styles.switcherContainer}>
-            <Switch defaultChecked onChange={val => setIsSimple(val)} />
+            <Switch defaultChecked={isSimple} onChange={val => setIsSimple(val)} />
             {t('StoryPage.simpleMode')}
           </div>
         </Form.Item>
@@ -136,9 +168,20 @@ export const StoryForm: FC<Props> = ({ story, onGenerate }) => {
           <InputNumber min={1} max={10} onChange={handleChangeScenes} />
         </Form.Item>
 
+        {!walletAddress && (
+          <Form.Item>
+            <Alert
+              message={t('notices.connectRequiredTitle')}
+              description={t('notices.connectRequiredText')}
+              type="warning"
+              showIcon
+            />
+          </Form.Item>
+        )}
+
         <ActionBar
           actionStart={
-            <Button type="primary" disabled={!prompt} onClick={handleSubmit}>
+            <Button type="primary" disabled={!prompt || !walletAddress} onClick={handleSubmit}>
               {t('StoryPage.generateStoryFor', {
                 cost: getReadableCost(calculateStoryGenerationCost(scenesNum)),
               })}

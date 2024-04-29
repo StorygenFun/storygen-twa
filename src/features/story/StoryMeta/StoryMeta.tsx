@@ -26,6 +26,7 @@ export const StoryMeta: FC<Props> = ({ story }) => {
     }
 
     await updateStory(story.id, update)
+    console.log('updateStory handleRemoveMeta')
   }
 
   return (

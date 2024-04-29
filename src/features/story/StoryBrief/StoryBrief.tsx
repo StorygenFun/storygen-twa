@@ -5,26 +5,26 @@ import { Button, Popconfirm, Result } from 'antd'
 import { ActionBar } from '@/components/ActionBar/ActionBar'
 import { useTranslation } from '@/i18n/client'
 import { CompactShortScene } from '../type'
-import styles from './StoryResponse.module.scss'
+import styles from './StoryBrief.module.scss'
 
 type Props = {
-  response: CompactShortScene[]
+  brief: CompactShortScene[]
   onCancel: () => void
   onGenerate: () => void
 }
 
-export const StoryResponse: FC<Props> = ({ response, onCancel, onGenerate }) => {
+export const StoryBrief: FC<Props> = ({ brief, onCancel, onGenerate }) => {
   const { t } = useTranslation()
 
-  const isWrongFormat = !Array.isArray(response)
+  const isWrongFormat = !Array.isArray(brief)
 
   return (
-    <div className={styles.response}>
+    <div className={styles.brief}>
       <h2 className={styles.h2}>{t('StoryPage.generatedScenes')}</h2>
 
       {!isWrongFormat ? (
         <ul className={styles.list}>
-          {response?.map((scene, index) => (
+          {brief?.map((scene, index) => (
             <li key={index} className={styles.chapter}>
               <h3 className={styles.title}>{scene.t}</h3>
               <p className={styles.paragraph}>{scene.d}</p>

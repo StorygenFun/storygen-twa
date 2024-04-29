@@ -101,19 +101,19 @@ export const generateSceneSummary = async (story: IStory, context: string, t: Tr
 
 export const generateScenes = async (
   story: IStory,
-  formattedResponse: CompactShortScene[],
+  formattedBrief: CompactShortScene[],
   t: Translation,
 ) => {
   const scenes: IScene[] = []
 
-  for (let i = 0; i < formattedResponse.length; i++) {
-    const context = buildScenePrompt(story, formattedResponse, i)
+  for (let i = 0; i < formattedBrief.length; i++) {
+    const context = buildScenePrompt(story, formattedBrief, i)
     const content = await generateSceneContent(story, context, t)
     if (content) {
       const summary = await generateSceneSummary(story, content, t)
       const scene: IScene = {
         id: uuidv4(),
-        title: formattedResponse[i].t,
+        title: formattedBrief[i].t,
         content,
         summary: summary ? summary : undefined,
       }

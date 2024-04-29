@@ -29,7 +29,7 @@ export const getNewStoryTaskText = (story: IStory, t: Translation) => {
 
 export const buildScenePrompt = (
   story: IStory,
-  response: CompactShortScene[],
+  brief: CompactShortScene[],
   num: number,
 ): string => {
   const prefix = story.lang === Language.RU ? 'Эпизод' : 'Scene'
@@ -37,7 +37,7 @@ export const buildScenePrompt = (
     story.lang === Language.RU
       ? `Максимально подробно напиши эпизод №${num + 1}`
       : `Write episode number ${num + 1} in as much detail as possible`
-  const content = response
+  const content = brief
     .map((scene, index) => `${prefix} ${index + 1}: ${scene.t}\n${scene.d}\n\n`)
     .join('')
   return `${content}\n${config}`
@@ -121,6 +121,6 @@ export const extractObjectFromString = (text?: string) => {
   }
 }
 
-export const formatResponse = (response: string): CompactShortScene[] => {
-  return extractArrayFromString(response)
+export const formatBrief = (brief: string): CompactShortScene[] => {
+  return extractArrayFromString(brief)
 }

@@ -12,6 +12,8 @@ export const LLMTextModelList = new Map([
   [LLMTextModel.Mixtral8x22BInstruct141B, 'Mixtral-8x22B Instruct (141B)'],
 ])
 
+export const DEFAULT_TEXT_MODEL = LLMTextModel.Mixtral8x22BInstruct141B
+
 export const LLMImageModelList = new Map([
   [LLMImageModel.Openjourney4, 'Prompt Hero Openjourney v4'],
   [LLMImageModel.RunwayStableDiffusion, 'Runway ML Stable Diffusion 1.5'],
@@ -22,6 +24,8 @@ export const LLMImageModelList = new Map([
   [LLMImageModel.Leonardo, 'Leonardo.AI'],
   // [LLMImageModel.StabilityDiffusion3Turbo, 'Stable Diffusion 3 Turbo'],
 ])
+
+export const DEFAULT_IMAGE_MODEL = LLMImageModel.Leonardo
 
 export const TOGETHER_AI_URL = 'https://api.together.xyz/v1'
 

@@ -11,7 +11,7 @@ import {
 import { UserAvatar } from '@/components/UserAvatar/UserAvatar'
 import { UserInfoModal } from '@/components/UserInfoModal/UserInfoModal'
 import { useWalletStore } from '@/features/wallet/walletStore'
-import { TonTransaction } from '../TonTransaction/TonTransaction'
+// import { TonTransaction } from '../TonTransaction/TonTransaction'
 import styles from './TonUser.module.scss'
 
 export const TonUser: FC = () => {
@@ -48,7 +48,7 @@ export const TonUser: FC = () => {
     <div className={styles.tonUser}>
       {userFriendlyAddress ? (
         <>
-          <TonTransaction />
+          {/* <TonTransaction /> */}
 
           <button className="ghostButton" onClick={() => setIsUserModalOpen(true)}>
             <UserAvatar avatarStr={userFriendlyAddress} />
