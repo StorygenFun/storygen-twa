@@ -120,11 +120,11 @@ export const Story: FC<StoryProps> = ({ storyId, siteUrl }) => {
       ...currentStory,
       title: resJSON?.storyTitles?.[0] || currentStory.title,
       names: resJSON?.storyTitles || [],
-      description: resJSON?.description || '',
-      summary: resJSON?.summary || '',
-      summary_en: resJSON?.summaryEn || resJSON?.summary || '',
-      cover_text: resJSON?.coverText || '',
-      cover_text_en: resJSON?.coverTextEn || resJSON?.coverText || '',
+      description: resJSON?.description || null,
+      summary: resJSON?.summary || null,
+      summary_en: resJSON?.summaryEn || resJSON?.summary || null,
+      cover_text: resJSON?.coverText || null,
+      cover_text_en: resJSON?.coverTextEn || resJSON?.coverText || null,
     }
 
     await updateStory(currentStory.id, updatedStory)

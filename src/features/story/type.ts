@@ -50,14 +50,14 @@ export type StoryOptions = {
 export type IStory = StoryOptions & {
   id: UUID
   title: string
-  description: string
-  summary: string
-  summary_en: string
+  description: string | null
+  summary: string | null
+  summary_en: string | null
   sceneIds: UUID[]
-  cover?: string
-  cover_text?: string
-  cover_text_en?: string
-  brief?: string
+  cover?: string | null
+  cover_text?: string | null
+  cover_text_en?: string | null
+  brief?: string | null
   names?: string[]
   payment_transaction?: string
   payment_date?: string

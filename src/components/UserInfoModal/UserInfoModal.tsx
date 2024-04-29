@@ -1,8 +1,9 @@
 'use client'
 
 import { FC } from 'react'
-import { WalletOutlined } from '@ant-design/icons'
-import { Button, List, Modal, Popconfirm } from 'antd'
+import { MessageOutlined, WalletOutlined } from '@ant-design/icons'
+import { Button, List, Modal, Popconfirm, Switch } from 'antd'
+import { useWalletStore } from '@/features/wallet/walletStore'
 import { useTranslation } from '@/i18n/client'
 import { LanguageSelector } from '../LanguageSelector/LanguageSelector'
 import styles from './UserInfoModal.module.scss'
@@ -16,14 +17,27 @@ type Props = {
 export const UserInfoModal: FC<Props> = ({ isOpen, walletAddress, onLogout, onClose }) => {
   const { t } = useTranslation()
 
+  const { isDebugMode, changeDebugMode } = useWalletStore()
+
   const data = [
     {
       title: 'Your wallet address',
       description: walletAddress,
+      icon: <WalletOutlined />,
     },
     {
       title: 'Your language',
       description: <LanguageSelector />,
+      icon: <MessageOutlined />,
+    },
+    {
+      title: 'Debug mode',
+      description: (
+        <div>
+          <Switch defaultChecked={isDebugMode} onChange={val => changeDebugMode(val)} />
+        </div>
+      ),
+      icon: <MessageOutlined />,
     },
   ]
 
@@ -57,7 +71,7 @@ export const UserInfoModal: FC<Props> = ({ isOpen, walletAddress, onLogout, onCl
         renderItem={item => (
           <List.Item>
             <List.Item.Meta
-              avatar={<WalletOutlined />}
+              avatar={item.icon}
               title={<a href="https://ant.design">{item.title}</a>}
               description={item.description}
             />

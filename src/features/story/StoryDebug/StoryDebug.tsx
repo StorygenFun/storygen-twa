@@ -1,44 +1,83 @@
 'use client'
 
-import { FC, useState } from 'react'
-import { SettingOutlined, WarningOutlined } from '@ant-design/icons'
-import { Button, List, Modal } from 'antd'
-import { useParams } from 'next/navigation'
+import { FC, useMemo, useState } from 'react'
+import { WarningOutlined } from '@ant-design/icons'
+import { Button, FloatButton, List, Modal, Switch } from 'antd'
+import { useSceneStore } from '@/features/scene/sceneStore'
+import { useWalletStore } from '@/features/wallet/walletStore'
+import { useStoryStore } from '../storyStore'
 
-type Props = {}
+type Props = {
+  storyId: string
+}
 
-export const StoryDebug: FC<Props> = () => {
-  const { id: storyId } = useParams()
-  console.log('🚀 ~ storyId:', storyId)
+export const StoryDebug: FC<Props> = ({ storyId }) => {
   const [isDebagActive, setIsDebagActive] = useState(false)
+  const [shouldClose, setShouldClose] = useState(true)
+  const { getStoryById, updateStory } = useStoryStore()
+  const { isDebugMode } = useWalletStore()
+  const { deleteScene } = useSceneStore()
 
-  const data = [
-    {
-      title: 'Remove brief',
-      action: () => {},
-    },
-    {
-      title: 'Remove scenes',
-      action: () => {},
-    },
-    {
-      title: 'Remove meta',
-      action: () => {},
-    },
-    {
-      title: 'Remove cover',
-      action: () => {},
-    },
-  ]
+  const initialStory = storyId ? getStoryById(storyId as string) : null
 
-  if (!storyId) return null
+  const data = useMemo(() => {
+    if (!initialStory) return []
+    return [
+      {
+        title: 'Remove brief',
+        isDisabled: !initialStory.brief,
+        action: () => {
+          updateStory(initialStory.id, { ...initialStory, brief: null })
+          if (shouldClose) setIsDebagActive(false)
+        },
+      },
+      {
+        title: 'Remove scenes',
+        isDisabled: !initialStory.sceneIds.length,
+        action: () => {
+          const ids = initialStory.sceneIds
+          ids.forEach(id => deleteScene(id))
+          updateStory(initialStory.id, { ...initialStory, sceneIds: [] })
+          if (shouldClose) setIsDebagActive(false)
+        },
+      },
+      {
+        title: 'Remove meta',
+        isDisabled: !initialStory.summary_en,
+        action: () => {
+          updateStory(initialStory.id, {
+            ...initialStory,
+            names: [],
+            description: null,
+            summary: null,
+            summary_en: null,
+            cover_text: null,
+            cover_text_en: null,
+          })
+          if (shouldClose) setIsDebagActive(false)
+        },
+      },
+      {
+        title: 'Remove cover',
+        isDisabled: !initialStory.cover,
+        action: () => {
+          updateStory(initialStory.id, { ...initialStory, cover: null })
+          if (shouldClose) setIsDebagActive(false)
+        },
+      },
+    ]
+  }, [deleteScene, initialStory, shouldClose, updateStory])
+
+  if (!storyId || !isDebugMode) return null
 
   return (
     <>
-      <Button
-        ghost
-        danger
-        icon={<SettingOutlined />}
+      <FloatButton
+        icon={
+          <span style={{ color: '#ff4d4f' }}>
+            <WarningOutlined />
+          </span>
+        }
         onClick={() => setIsDebagActive(!isDebagActive)}
       />
 
@@ -61,12 +100,16 @@ export const StoryDebug: FC<Props> = () => {
           renderItem={item => (
             <List.Item key={item.title}>
               <List.Item.Meta title={item.title} />
-              <Button type="primary" danger onClick={item.action}>
+              <Button type="primary" danger disabled={item.isDisabled} onClick={item.action}>
                 Remove
               </Button>
             </List.Item>
           )}
         />
+        <div>
+          <Switch defaultChecked={shouldClose} onChange={val => setShouldClose(val)} /> Close after
+          an action
+        </div>
       </Modal>
     </>
   )
