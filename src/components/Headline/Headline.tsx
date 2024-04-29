@@ -1,6 +1,7 @@
 import { FC, PropsWithChildren } from 'react'
 import { Header } from 'antd/es/layout/layout'
 import Link from 'next/link'
+import { StoryDebug } from '@/features/story/StoryDebug/StoryDebug'
 import { WalletSection } from '@/features/wallet/WalletSection/WalletSection'
 import { Container } from '../Container/Container'
 import styles from './Headline.module.scss'
@@ -53,6 +54,8 @@ export const Headline: FC<PropsWithChildren> = () => {
             </Link>
           </li>
         </ul>
+
+        {false && <StoryDebug />}
 
         <WalletSection siteUrl={process.env.NEXT_PUBLIC_BASE_URL || 'https://storygen.fun'} />
       </Container>

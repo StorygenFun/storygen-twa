@@ -64,8 +64,6 @@ export const UserInfoModal: FC<Props> = ({ isOpen, walletAddress, onLogout, onCl
           </List.Item>
         )}
       />
-
-      {t('HomePage.title')}
     </Modal>
   )
 }

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Container } from '@/components/Container/Container'
 import { Heading } from '@/components/Heading/Heading'
-import { OpenAiConnector } from '@/components/OpenAiConnector'
+// import { OpenAiConnector } from '@/components/OpenAiConnector'
 import { createTranslation } from '@/i18n/server'
 
 export const metadata: Metadata = {
@@ -15,7 +15,7 @@ export default async function Home() {
   return (
     <Container>
       <Heading>HomePage</Heading>
-      <OpenAiConnector />
+      {/* <OpenAiConnector /> */}
       {t('HomePage.title')}
     </Container>
   )
