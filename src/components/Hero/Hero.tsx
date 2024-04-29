@@ -2,6 +2,7 @@
 
 import { FC, PropsWithChildren } from 'react'
 import { Button } from 'antd'
+import Link from 'next/link'
 import styles from './Hero.module.scss'
 
 type Props = {
@@ -30,9 +31,9 @@ export const Hero: FC<PropsWithChildren<Props>> = ({
           <div className={styles.content}>
             <h1 className={styles.title}>{title}</h1>
             {ctaText && ctaUrl && (
-              <Button href={ctaUrl} size="large">
-                {ctaText}
-              </Button>
+              <Link href={ctaUrl}>
+                <Button size="large">{ctaText}</Button>
+              </Link>
             )}
             {children && <div className={styles.children}>{children}</div>}
           </div>
