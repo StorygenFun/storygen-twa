@@ -1,7 +1,5 @@
 import type { Metadata } from 'next'
-import { Container } from '@/components/Container/Container'
-import { Heading } from '@/components/Heading/Heading'
-// import { OpenAiConnector } from '@/components/OpenAiConnector'
+import { Hero } from '@/components/Hero/Hero'
 import { createTranslation } from '@/i18n/server'
 
 export const metadata: Metadata = {
@@ -13,10 +11,13 @@ export default async function Home() {
   const { t } = await createTranslation()
 
   return (
-    <Container>
-      <Heading>HomePage</Heading>
-      {/* <OpenAiConnector /> */}
-      {t('HomePage.title')}
-    </Container>
+    <>
+      <Hero
+        title={t('HomePage.title')}
+        imageUrl="/images/storygen.fun-hero.webp"
+        ctaText={t('HomePage.cta')}
+        ctaUrl="/projects"
+      />
+    </>
   )
 }

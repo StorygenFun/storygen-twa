@@ -8,7 +8,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-big);
+  gap: var(--space-base);
   height: 100%;
   padding: 0 var(--space-base);
 
@@ -43,10 +43,14 @@
 
 .logoText {
   flex: 0 0 auto;
+
+  @media (max-width: 480px) {
+    display: none;
+  }
 }
 
 .menuList {
-  margin: 0;
+  margin: 0 auto 0 0;
   padding: 0;
   list-style: none;
   color: #fff;

@@ -1,0 +1,46 @@
+.hero {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 1/0.5;
+  max-width: var(--device-max-size);
+  margin: 0 auto;
+  padding: var(--space-base);
+  background: var(--color-border);
+  background-size: cover;
+  text-align: center;
+}
+
+.container {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    border-radius: 50%;
+    box-shadow: 0 0 100px 100px rgba(#000, 1);
+    opacity: 0.4;
+  }
+}
+
+.content {
+  position: relative;
+}
+
+.title {
+  margin: 0 0 var(--space-big);
+  color: #fff;
+  font-weight: 500;
+  text-shadow: 2px 2px 4px rgba(#000, 1);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}

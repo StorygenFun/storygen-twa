@@ -1,6 +1,6 @@
 const translation = {
   HomePage: {
-    title: "Let's make up a new story!",
+    title: "Let's write a new story!",
     cta: 'Start writing',
   },
   StoryPage: {
