@@ -1,7 +1,8 @@
 import { AntdRegistry } from '@ant-design/nextjs-registry'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import { Headline } from '@/components/Headline/Headline'
+import { Footer } from '@/components/Footer/Footer'
+import { Header } from '@/components/Header/Header'
 import { LocaleProvider } from '@/i18n/locale-provider'
 import { getLocale } from '@/i18n/server'
 import '../styles/main.scss'
@@ -26,8 +27,11 @@ export default function RootLayout({
       <body className={inter.className}>
         <LocaleProvider value={locale}>
           <AntdRegistry>
-            <Headline />
-            {children}
+            <div className="layout">
+              <Header />
+              <main className="main">{children}</main>
+              <Footer />
+            </div>
           </AntdRegistry>
         </LocaleProvider>
       </body>

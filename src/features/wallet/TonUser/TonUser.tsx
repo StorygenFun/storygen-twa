@@ -41,7 +41,7 @@ export const TonUser: FC = () => {
   }
 
   if (!connectionRestored) {
-    return <div>Please wait...</div>
+    return <div className={styles.loading}>Please wait...</div>
   }
 
   return (
