@@ -56,7 +56,7 @@ const translation = {
     paymentMessageDanger: 'Payment failed, please try again.',
     generateStoryFor: 'Generate a story for {{cost}}',
     generateScenes: 'Generate scenes',
-    generatedScenes: 'Generated scenes for your story',
+    generatedBrief: 'Brief description',
     regenerate: 'Regenerate with new data',
     generateFullStory: 'Generate full story',
     generatingScene: 'Generating scenes',
@@ -67,6 +67,9 @@ const translation = {
     removeMetaData: 'Remove Meta Data',
     generateWith: 'with',
     generateCover: 'Generate Cover',
+  },
+  header: {
+    projects: 'Stories',
   },
   prompts: {
     writerVariant: {
@@ -122,7 +125,20 @@ storyTitles - an array of 10 story titles.
     no: 'No',
     close: 'Close',
     pay: 'Pay',
+    publish: 'Publish',
     clearDatabase: 'Clear Database',
+  },
+  progress: {
+    start: 'Start writing your new story',
+    briefInProgress: 'Generating a brief description',
+    briefDone: 'Brief description is generated',
+    scenesInProgress: 'Generating scenes: {{num}} from {{total}} are ready',
+    scenesDone: 'The scenes are ready',
+    metaInProgress: 'Generating additional data',
+    metaDone: 'Additional data is generated',
+    coverInProgress: 'Generating a cover',
+    coverDone: 'Cover is generated',
+    completed: 'Your story is written',
   },
   notices: {
     connectRequiredTitle: 'You are not authorized',

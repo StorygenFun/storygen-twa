@@ -36,3 +36,5 @@ export const getClient = (key: string, baseURL?: string) => {
     dangerouslyAllowBrowser: true,
   })
 }
+
+export const DEFAULT_TYPING_SPEED = 1

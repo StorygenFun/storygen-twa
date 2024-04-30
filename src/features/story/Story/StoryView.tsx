@@ -12,43 +12,41 @@ import { StoryBrief } from '@/features/story/StoryBrief/StoryBrief'
 import { StoryCover } from '@/features/story/StoryCover/StoryCover'
 import { StoryForm } from '@/features/story/StoryForm/StoryForm'
 import { StoryMeta } from '@/features/story/StoryMeta/StoryMeta'
-import { StoryMetaForm } from '@/features/story/StoryMetaForm/StoryMetaForm'
 import { useWalletStore } from '@/features/wallet/walletStore'
-import { IStory, StoryOptions } from '../type'
+import { useTranslation } from '@/i18n/client'
+import { StoryMetaForm } from '../StoryMetaForm/StoryMetaForm'
+import { IStory } from '../type'
 import { formatBrief } from '../utils/story.utils'
 import styles from './Story.module.scss'
 
 type StoryProps = {
   story: IStory
-  generatedScene: string | null
   isStoryGenerating: boolean
-  isSummaryGenerating: boolean
-  isMetaGenerating: boolean
-  isCoverGenerating: boolean
   scenesList: IScene[] | undefined
+  onChange: (stroy: IStory) => void
   onChangeTitle: (title: string) => void
-  onGenerateStart: (options: StoryOptions) => void
+  onGenerateStart: () => void
   onGenerateScenes: () => void
-  onGenerateMeta: (textModel: LLMTextModel) => void
+  onGenerateMeta: (textModel?: LLMTextModel) => void
   onGenerateCover: (imageModel: LLMImageModel) => void
 }
 
 export const StoryView: FC<StoryProps> = ({
   story,
-  generatedScene,
   isStoryGenerating,
-  isSummaryGenerating,
-  isMetaGenerating,
-  isCoverGenerating,
   scenesList,
+  onChange,
   onChangeTitle,
   onGenerateStart,
   onGenerateScenes,
   onGenerateMeta,
   onGenerateCover,
 }) => {
+  const { t } = useTranslation()
   const formattedBrief = story?.brief ? formatBrief(story?.brief) : null
   const { isDebugMode } = useWalletStore()
+
+  const isControlsVisible = !story.isSimple || isDebugMode
 
   const NameSelector = () => {
     if (!story.names?.length) return null
@@ -90,51 +88,51 @@ export const StoryView: FC<StoryProps> = ({
         <Heading isCentered title={story.title} />
       )}
 
-      {!scenesList?.length && !isStoryGenerating ? (
-        <div className={styles.content}>
-          {!formattedBrief ? (
-            <StoryForm story={story} onGenerate={onGenerateStart} />
-          ) : (
-            <StoryBrief brief={formattedBrief} onGenerate={onGenerateScenes} />
-          )}
-        </div>
-      ) : (
-        <>
-          {story.scenesNum === story.sceneIds.length && story.summary && (
-            <>
-              <StoryCover
-                story={story}
-                isGenerating={isCoverGenerating}
-                onGenerate={onGenerateCover}
-              />
-              <StoryMeta story={story} isGenerating={isMetaGenerating} />
-            </>
-          )}
-
-          {scenesList && (
-            <ScenesList
-              list={scenesList}
-              generatedScene={generatedScene}
-              isStoryGenerating={isStoryGenerating && story.scenesNum !== story.sceneIds.length}
-              isSummaryGenerating={isSummaryGenerating}
-            />
-          )}
-
-          {!isStoryGenerating && (
-            <ActionBar
-              actionEnd={
-                !story.summary && (
-                  <StoryMetaForm
-                    story={story}
-                    isGenerating={isMetaGenerating}
-                    onGenerate={onGenerateMeta}
-                  />
-                )
-              }
-            />
-          )}
-        </>
+      {!story.brief && !isStoryGenerating && (
+        <StoryForm story={story} onChange={onChange} onGenerate={onGenerateStart} />
       )}
+
+      {formattedBrief && story.sceneIds.length === 0 && (
+        <StoryBrief brief={formattedBrief} onClear={() => onChange({ ...story, brief: null })} />
+      )}
+
+      {story.brief && !story.sceneIds.length && isControlsVisible && (
+        <ActionBar
+          actionEnd={
+            <Button type="primary" disabled={isStoryGenerating} onClick={onGenerateScenes}>
+              {t('StoryPage.generateFullStory')}
+            </Button>
+          }
+        />
+      )}
+
+      {story.summary_en && (
+        <StoryCover story={story} isGenerating={isStoryGenerating} onGenerate={onGenerateCover} />
+      )}
+
+      {story.summary_en && <StoryMeta story={story} isGenerating={isStoryGenerating} />}
+
+      {scenesList && scenesList.length > 0 && (
+        <ScenesList
+          story={story}
+          scenes={scenesList}
+          isStoryGenerating={isStoryGenerating && story.scenesNum !== story.sceneIds.length}
+          isSummaryGenerating={isStoryGenerating}
+        />
+      )}
+
+      {story.brief &&
+        !story.summary_en &&
+        scenesList &&
+        scenesList.length === story.scenesNum &&
+        isControlsVisible && (
+          <StoryMetaForm
+            story={story}
+            isStoryGenerating={isStoryGenerating}
+            isDebugMode={isDebugMode}
+            onGenerate={onGenerateMeta}
+          />
+        )}
     </article>
   )
 }

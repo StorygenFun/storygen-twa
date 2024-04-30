@@ -14,10 +14,10 @@ type Props = {
   storyForPay: IStory | null
   onClear: () => void
   onError: (error: string) => void
-  onGenerate: (story: IStory) => void
+  onChange: (story: IStory) => void
 }
 
-export const StoryPayment: FC<Props> = ({ storyForPay, onClear, onError, onGenerate }) => {
+export const StoryPayment: FC<Props> = ({ storyForPay, onClear, onError, onChange }) => {
   const { t } = useTranslation()
   const [tonConnectUI] = useTonConnectUI()
 
@@ -45,7 +45,7 @@ export const StoryPayment: FC<Props> = ({ storyForPay, onClear, onError, onGener
 
     try {
       const response = await tonConnectUI.sendTransaction(transaction)
-      onGenerate({
+      onChange({
         ...storyForPay,
         payment_transaction: response.boc,
         payment_date: new Date().toISOString(),

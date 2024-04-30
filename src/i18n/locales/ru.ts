@@ -55,7 +55,7 @@ const translation = {
     paymentMessageDanger: 'Оплата не удалась, попробуйте снова.',
     generateStoryFor: 'Сгенерировать историю за {{cost}}',
     generateScenes: 'Сгенерировать сцены',
-    generatedScenes: 'Сгенерированные сцены для вашей истории',
+    generatedBrief: 'Краткое содержание',
     regenerate: 'Перегенерировать с новыми данными',
     generateFullStory: 'Сгенерировать полную историю',
     generatingScene: 'Генерация эпизодов',
@@ -66,6 +66,9 @@ const translation = {
     removeMetaData: 'Удалить дополниельные данные',
     generateWith: 'с помощью',
     generateCover: 'Сгенерировать обложку',
+  },
+  header: {
+    projects: 'Истории',
   },
   prompts: {
     writerVariant: {
@@ -122,7 +125,20 @@ storyTitles - массив из 10 названий истории на русс
     no: 'Нет',
     close: 'Закрыть',
     pay: 'Оплатить',
+    publish: 'Опубликовать',
     clearDatabase: 'Очистить базу данных',
+  },
+  progress: {
+    start: 'Начните писать вашу новую историю',
+    briefInProgress: 'Генерируем краткое описание',
+    briefDone: 'Краткое описание готово',
+    scenesInProgress: 'Генерируем сцены: {{num}} из {{total}} готовы',
+    scenesDone: 'Сцены готовы',
+    metaInProgress: 'Генерируем дополнительные данные',
+    metaDone: 'Дополнительные данные готовы',
+    coverInProgress: 'Генерируем обложку',
+    coverDone: 'Обложка готова',
+    completed: 'Ваша история написана',
   },
   notices: {
     connectRequiredTitle: 'Вы не авторизованы',

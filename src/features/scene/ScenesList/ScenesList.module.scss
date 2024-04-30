@@ -15,3 +15,11 @@
 .paragraph {
   white-space: pre-wrap;
 }
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-small);
+  color: var(--color-border);
+}

@@ -5,9 +5,10 @@
 }
 
 .form {
-  display: flex;
+  display: flex !important;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
   gap: var(--space-base);
 
   @media (max-width: 800px) {

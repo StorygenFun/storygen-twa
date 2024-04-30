@@ -1,54 +1,30 @@
 'use client'
 
-import { FC, useCallback, useEffect, useState } from 'react'
+import { FC, useCallback } from 'react'
 import { Alert, Button, Form, InputNumber, Select, Switch } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import { ActionBar } from '@/components/ActionBar/ActionBar'
 import { LLMImageModelList, LLMTextModelList } from '@/features/llm/constants'
-import { LLMImageModel, LLMTextModel } from '@/features/llm/types'
-import {
-  GenerationStep,
-  IStory,
-  StoryAudience,
-  StoryGenre,
-  StoryOptions,
-  StoryWriter,
-} from '@/features/story/type'
+import { IStory, StoryAudience, StoryGenre, StoryWriter } from '@/features/story/type'
 import {
   calculateStoryGenerationCost,
   getReadableCost,
 } from '@/features/wallet/utils/payment.utils'
 import { useWalletStore } from '@/features/wallet/walletStore'
 import { useTranslation } from '@/i18n/client'
-import { useStoryStore } from '../storyStore'
 import styles from './StoryForm.module.scss'
 
 type Props = {
   story: IStory
-  onGenerate: (options: StoryOptions) => void
+  onChange: (story: IStory) => void
+  onGenerate: () => void
 }
 
-export const StoryForm: FC<Props> = ({ story, onGenerate }) => {
+type KeyOfIStory = keyof IStory
+
+export const StoryForm: FC<Props> = ({ story, onChange, onGenerate }) => {
   const { t } = useTranslation()
-  const { changeCurrentStep } = useStoryStore()
   const { walletAddress } = useWalletStore()
-
-  const [prompt, setPrompt] = useState(story.prompt || '')
-  const [textModel, setTextModel] = useState<LLMTextModel>(
-    story.textModel || LLMTextModel.Mixtral8x22BInstruct141B,
-  )
-  const [imageModel, setImageModel] = useState<LLMImageModel>(
-    story.imageModel || LLMImageModel.Leonardo,
-  )
-  const [scenesNum, setScenesNum] = useState<number>(story.scenesNum || 5)
-  const [writer, setWriter] = useState<StoryWriter | string | undefined>(story.writer)
-  const [genre, setGenre] = useState<StoryGenre | undefined>(story.genre)
-  const [audience, setAudience] = useState<StoryAudience | undefined>(story.audience)
-  const [isSimple, setIsSimple] = useState(!!story.isSimple)
-
-  useEffect(() => {
-    changeCurrentStep(GenerationStep.Brief)
-  }, [changeCurrentStep])
 
   const buildOptions = (list: string[], translationPrefix: string) => {
     return list.map(item => {
@@ -60,83 +36,62 @@ export const StoryForm: FC<Props> = ({ story, onGenerate }) => {
   const genreOptions = buildOptions(Object.values(StoryGenre), 'StoryPage.genres')
   const audienceOptions = buildOptions(Object.values(StoryAudience), 'StoryPage.audiences')
 
-  const handleChangeScenes = (e: number | null) => {
-    setScenesNum(e || 1)
-  }
-
-  const handleSubmit = useCallback(async () => {
-    if (!prompt) return
-
-    if (!walletAddress) {
-      console.log('!!!!!!!')
-      return
-    }
-
-    onGenerate({
-      prompt,
-      textModel,
-      imageModel,
-      scenesNum,
-      writer,
-      genre,
-      audience,
-      isSimple,
-    })
-  }, [
-    prompt,
-    walletAddress,
-    onGenerate,
-    textModel,
-    imageModel,
-    scenesNum,
-    writer,
-    genre,
-    audience,
-    isSimple,
-  ])
+  const handleChange = useCallback(
+    (key: KeyOfIStory, value: IStory[KeyOfIStory]): void => {
+      void onChange({ ...story, [key]: value })
+    },
+    [onChange, story],
+  )
 
   return (
     <div className={styles.storyForm}>
       <Form
         layout="vertical"
         initialValues={{
-          promptValue: prompt,
-          textModelValue: textModel,
-          imageModelValue: imageModel,
-          scenesValue: scenesNum,
-          writerValue: writer ? [writer] : [],
-          genreValue: genre,
-          audienceValue: audience,
-          isSimpleValue: isSimple,
+          promptValue: story.prompt,
+          textModelValue: story.textModel,
+          imageModelValue: story.imageModel,
+          scenesValue: story.scenesNum,
+          writerValue: story.writer ? [story.writer] : [],
+          genreValue: story.genre,
+          audienceValue: story.audience,
+          isSimpleValue: story.isSimple,
         }}
       >
         <Form.Item label={t('StoryPage.prompt')} name="promptValue">
-          <TextArea rows={5} value={prompt} onChange={e => setPrompt(e.target.value)} />
+          <TextArea
+            rows={5}
+            value={story.prompt}
+            onChange={e => handleChange('prompt', e.target.value)}
+          />
         </Form.Item>
 
         <Form.Item name="isSimpleValue">
           <div className={styles.switcherContainer}>
-            <Switch defaultChecked={isSimple} onChange={val => setIsSimple(val)} />
+            <Switch
+              defaultChecked={story.isSimple}
+              onChange={val => handleChange('isSimple', val)}
+            />
             {t('StoryPage.simpleMode')}
           </div>
         </Form.Item>
 
-        {!isSimple && (
+        {!story.isSimple && (
           <Form.Item label={t('StoryPage.textModel')} name="textModelValue">
             <Select
               style={{ width: 300 }}
               options={Array.from(LLMTextModelList, ([value, label]) => ({ value, label }))}
-              onChange={val => setTextModel(val)}
+              onChange={val => handleChange('textModel', val)}
             />
           </Form.Item>
         )}
 
-        {!isSimple && (
+        {!story.isSimple && (
           <Form.Item label={t('StoryPage.imageModel')} name="imageModelValue">
             <Select
               style={{ width: 300 }}
               options={Array.from(LLMImageModelList, ([value, label]) => ({ value, label }))}
-              onChange={val => setImageModel(val)}
+              onChange={val => handleChange('imageModel', val)}
             />
           </Form.Item>
         )}
@@ -148,24 +103,28 @@ export const StoryForm: FC<Props> = ({ story, onGenerate }) => {
             placeholder={t('StoryPage.ownStyle')}
             maxCount={1}
             options={writerOptions}
-            onChange={val => setWriter(val[0])}
+            onChange={val => handleChange('writer', val[0])}
           />
         </Form.Item>
 
         <Form.Item label={t('StoryPage.genre')} name="genreValue">
-          <Select options={genreOptions} style={{ width: 300 }} onChange={val => setGenre(val)} />
+          <Select
+            options={genreOptions}
+            style={{ width: 300 }}
+            onChange={val => handleChange('genre', val)}
+          />
         </Form.Item>
 
         <Form.Item label={t('StoryPage.audience')} name="audienceValue">
           <Select
             options={audienceOptions}
             style={{ width: 300 }}
-            onChange={val => setAudience(val)}
+            onChange={val => handleChange('audience', val)}
           />
         </Form.Item>
 
         <Form.Item label={t('StoryPage.numberOfScenes')} name="scenesValue">
-          <InputNumber min={1} max={10} onChange={handleChangeScenes} />
+          <InputNumber min={1} max={10} onChange={val => handleChange('scenesNum', val || 1)} />
         </Form.Item>
 
         {!walletAddress && (
@@ -181,9 +140,9 @@ export const StoryForm: FC<Props> = ({ story, onGenerate }) => {
 
         <ActionBar
           actionStart={
-            <Button type="primary" disabled={!prompt || !walletAddress} onClick={handleSubmit}>
+            <Button type="primary" disabled={!story.prompt || !walletAddress} onClick={onGenerate}>
               {t('StoryPage.generateStoryFor', {
-                cost: getReadableCost(calculateStoryGenerationCost(scenesNum)),
+                cost: getReadableCost(calculateStoryGenerationCost(story.scenesNum || 1)),
               })}
             </Button>
           }

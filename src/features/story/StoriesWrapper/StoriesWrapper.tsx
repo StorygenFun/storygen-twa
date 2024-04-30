@@ -6,6 +6,7 @@ import { Button } from 'antd'
 import { v4 as uuidv4 } from 'uuid'
 import { Heading } from '@/components/Heading/Heading'
 import { Spinner } from '@/components/Spinner/Spinner'
+import { DEFAULT_IMAGE_MODEL, DEFAULT_TEXT_MODEL } from '@/features/llm/constants'
 import { Language } from '@/features/localization/types'
 import { useTranslation } from '@/i18n/client'
 import { UUID } from '@/types/common'
@@ -35,6 +36,9 @@ export const StoriesWrapper: FC = () => {
       summary: '',
       summary_en: '',
       sceneIds: [],
+      scenesNum: 5,
+      textModel: DEFAULT_TEXT_MODEL,
+      imageModel: DEFAULT_IMAGE_MODEL,
       lang: currentLanguage,
       isSimple: true,
       created_at: new Date().toISOString(),

@@ -2,10 +2,13 @@ import { FC, PropsWithChildren } from 'react'
 import { Header as AntHeader } from 'antd/es/layout/layout'
 import Link from 'next/link'
 import { WalletSection } from '@/features/wallet/WalletSection/WalletSection'
+import { createTranslation } from '@/i18n/server'
 import { Container } from '../Container/Container'
 import styles from './Header.module.scss'
 
-export const Header: FC<PropsWithChildren> = () => {
+export const Header: FC<PropsWithChildren> = async () => {
+  const { t } = await createTranslation()
+
   return (
     <AntHeader className={styles.header}>
       <Container className={styles.wrapper}>
@@ -49,7 +52,7 @@ export const Header: FC<PropsWithChildren> = () => {
         <ul className={styles.menuList}>
           <li className={styles.menuItem}>
             <Link href="/projects" className={styles.menuLink}>
-              Stories
+              {t('header.projects')}
             </Link>
           </li>
         </ul>
