@@ -7,9 +7,23 @@
   min-height: 50vh;
 }
 
+.compact {
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-small);
+  min-height: 0;
+  color: var(--color-border);
+}
+
 .content {
   margin-block-start: var(--space-base);
-  color: var(--color-hint);
   font-size: var(--font-big);
   text-align: center;
+
+  .compact & {
+    margin: 0;
+    color: var(--color-border);
+    font-size: var(--font-base);
+  }
 }

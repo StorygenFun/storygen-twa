@@ -2,18 +2,20 @@
 
 import { FC, useMemo, useState } from 'react'
 import { Button, Result } from 'antd'
+import { Spinner } from '@/components/Spinner/Spinner'
 import { TypedText } from '@/components/TypedText/TypedText'
 import { useTranslation } from '@/i18n/client'
 import { CompactShortScene } from '../type'
 import styles from './StoryBrief.module.scss'
 
 type Props = {
-  brief: CompactShortScene[]
+  brief?: CompactShortScene[] | null
   typeSpeed?: number
+  isStoryGenerating: boolean
   onClear: () => void
 }
 
-export const StoryBrief: FC<Props> = ({ brief, typeSpeed, onClear }) => {
+export const StoryBrief: FC<Props> = ({ brief, typeSpeed, isStoryGenerating, onClear }) => {
   const { t } = useTranslation()
 
   const isWrongFormat = !Array.isArray(brief)
@@ -27,17 +29,24 @@ export const StoryBrief: FC<Props> = ({ brief, typeSpeed, onClear }) => {
     ])
   }, [brief])
 
+  if (!brief && isStoryGenerating) {
+    return <Spinner isCompact size="default" content={t('progress.briefInProgress')} />
+  }
+
+  if (!brief) return null
+
   return (
     <div className={styles.brief}>
       <h2 className={styles.h2}>{t('StoryPage.generatedBrief')}</h2>
 
       {!isWrongFormat ? (
         <section className={styles.content}>
-          {output.map((item, index) => (
-            <>
+          {output?.map((item, index) => (
+            <div key={index}>
               {item.type === 'title' && index <= currentIndex && (
-                <h3 className={styles.title} key={index}>
+                <h3 className={styles.title}>
                   <TypedText
+                    // isTyped={isStoryGenerating}
                     text={item.content}
                     typeSpeed={typeSpeed}
                     onComplete={() => setCurrentIndex(index + 1)}
@@ -45,15 +54,16 @@ export const StoryBrief: FC<Props> = ({ brief, typeSpeed, onClear }) => {
                 </h3>
               )}
               {item.type === 'description' && index <= currentIndex && (
-                <p className={styles.paragraph} key={index}>
+                <p className={styles.paragraph}>
                   <TypedText
+                    // isTyped={isStoryGenerating}
                     text={item.content}
                     typeSpeed={typeSpeed}
                     onComplete={() => setCurrentIndex(index + 1)}
                   />
                 </p>
               )}
-            </>
+            </div>
           ))}
         </section>
       ) : (

@@ -1,7 +1,7 @@
 'use client'
 
 import { FC, useMemo, useState } from 'react'
-import { Spin } from 'antd'
+import { Spinner } from '@/components/Spinner/Spinner'
 import { TypedText } from '@/components/TypedText/TypedText'
 import { IStory } from '@/features/story/type'
 import { useTranslation } from '@/i18n/client'
@@ -12,11 +12,10 @@ type Props = {
   story: IStory
   scenes: IScene[]
   isStoryGenerating: boolean
-  isSummaryGenerating: boolean
   typeSpeed?: number
 }
 
-export const ScenesList: FC<Props> = ({ story, scenes, isSummaryGenerating, typeSpeed }) => {
+export const ScenesList: FC<Props> = ({ story, scenes, isStoryGenerating, typeSpeed }) => {
   const { t } = useTranslation()
 
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -31,9 +30,9 @@ export const ScenesList: FC<Props> = ({ story, scenes, isSummaryGenerating, type
   }, [scenes])
 
   return (
-    <>
+    <section className={styles.scene}>
       {output.map((item, index) => (
-        <section key={index} className={styles.scene}>
+        <div key={index}>
           {item.type === 'title' && index <= currentIndex && (
             <h3 className={styles.title}>
               <TypedText
@@ -52,17 +51,12 @@ export const ScenesList: FC<Props> = ({ story, scenes, isSummaryGenerating, type
               />
             </p>
           )}
-        </section>
+        </div>
       ))}
 
-      {isSummaryGenerating && scenes.length !== story.scenesNum && (
-        <div className={styles.loading}>
-          <Spin size="small" />
-          <div className={styles.content}>
-            {t('progress.scenesInProgress', { num: scenes.length, total: story.scenesNum })}
-          </div>
-        </div>
+      {isStoryGenerating && scenes.length !== story.scenesNum && (
+        <Spinner isCompact size="default" content={t('progress.briefInProgress')} />
       )}
-    </>
+    </section>
   )
 }

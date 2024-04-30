@@ -8,7 +8,7 @@ import styles from './StoryMeta.module.scss'
 type Props = {
   story: IStory
   typeSpeed?: number
-  isGenerating: boolean
+  isStoryGenerating: boolean
 }
 
 export const StoryMeta: FC<Props> = ({ story, typeSpeed }) => {
@@ -20,6 +20,7 @@ export const StoryMeta: FC<Props> = ({ story, typeSpeed }) => {
         {story.description && (
           <h3 className={styles.description}>
             <TypedText
+              // isTyped={isStoryGenerating}
               text={story.description}
               typeSpeed={typeSpeed}
               onComplete={() => setCurrentIndex(1)}
@@ -30,6 +31,7 @@ export const StoryMeta: FC<Props> = ({ story, typeSpeed }) => {
           <p>
             <q className={styles.quote}>
               <TypedText
+                // isTyped={isStoryGenerating}
                 text={story.summary}
                 typeSpeed={typeSpeed}
                 onComplete={() => setCurrentIndex(2)}

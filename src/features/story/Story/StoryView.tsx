@@ -92,8 +92,12 @@ export const StoryView: FC<StoryProps> = ({
         <StoryForm story={story} onChange={onChange} onGenerate={onGenerateStart} />
       )}
 
-      {formattedBrief && story.sceneIds.length === 0 && (
-        <StoryBrief brief={formattedBrief} onClear={() => onChange({ ...story, brief: null })} />
+      {story.sceneIds.length === 0 && (
+        <StoryBrief
+          brief={formattedBrief}
+          isStoryGenerating={isStoryGenerating}
+          onClear={() => onChange({ ...story, brief: null })}
+        />
       )}
 
       {story.brief && !story.sceneIds.length && isControlsVisible && (
@@ -110,15 +114,10 @@ export const StoryView: FC<StoryProps> = ({
         <StoryCover story={story} isGenerating={isStoryGenerating} onGenerate={onGenerateCover} />
       )}
 
-      {story.summary_en && <StoryMeta story={story} isGenerating={isStoryGenerating} />}
+      {story.summary_en && <StoryMeta story={story} isStoryGenerating={isStoryGenerating} />}
 
       {scenesList && scenesList.length > 0 && (
-        <ScenesList
-          story={story}
-          scenes={scenesList}
-          isStoryGenerating={isStoryGenerating && story.scenesNum !== story.sceneIds.length}
-          isSummaryGenerating={isStoryGenerating}
-        />
+        <ScenesList story={story} scenes={scenesList} isStoryGenerating={isStoryGenerating} />
       )}
 
       {story.brief &&
