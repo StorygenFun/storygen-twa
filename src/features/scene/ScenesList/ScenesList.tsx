@@ -55,7 +55,11 @@ export const ScenesList: FC<Props> = ({ story, scenes, isStoryGenerating, typeSp
       ))}
 
       {isStoryGenerating && scenes.length !== story.scenesNum && (
-        <Spinner isCompact size="default" content={t('progress.briefInProgress')} />
+        <Spinner
+          isCompact
+          size="default"
+          content={t('progress.scenesInProgress', { num: scenes.length, total: story.scenesNum })}
+        />
       )}
     </section>
   )
