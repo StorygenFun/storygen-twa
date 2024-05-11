@@ -147,6 +147,7 @@ storyTitles - an array of 10 story titles.
     createStory: 'Create your new story',
     deleteDB: 'Are you sure to clear your local database?',
     deleteDBDescription: 'Once the database is deleted, you cannot undo this action',
+    havePromoCode: 'Have you any Promo Code?',
   },
 }
 

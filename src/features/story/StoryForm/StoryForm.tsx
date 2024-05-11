@@ -1,6 +1,7 @@
 'use client'
 
 import { FC, useCallback } from 'react'
+import { fromNano } from '@ton/core'
 import { Alert, Button, Form, InputNumber, Select, Switch } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import { ActionBar } from '@/components/ActionBar/ActionBar'
@@ -24,7 +25,7 @@ type KeyOfIStory = keyof IStory
 
 export const StoryForm: FC<Props> = ({ story, onChange, onGenerate }) => {
   const { t } = useTranslation()
-  const { walletAddress } = useWalletStore()
+  const { walletAddress, promoCodeBalance } = useWalletStore()
 
   const buildOptions = (list: string[], translationPrefix: string) => {
     return [
@@ -39,6 +40,10 @@ export const StoryForm: FC<Props> = ({ story, onChange, onGenerate }) => {
   const writerOptions = buildOptions(Object.values(StoryWriter), 'StoryPage.writers')
   const genreOptions = buildOptions(Object.values(StoryGenre), 'StoryPage.genres')
   const audienceOptions = buildOptions(Object.values(StoryAudience), 'StoryPage.audiences')
+
+  const cost = Number(fromNano(calculateStoryGenerationCost(story.scenesNum || 1)))
+
+  const canUsePromoCode = promoCodeBalance && promoCodeBalance >= cost
 
   const handleChange = useCallback(
     (key: KeyOfIStory, value: IStory[KeyOfIStory]): void => {
@@ -129,7 +134,7 @@ export const StoryForm: FC<Props> = ({ story, onChange, onGenerate }) => {
           <InputNumber min={1} max={10} onChange={val => handleChange('scenesNum', val || 1)} />
         </Form.Item>
 
-        {!walletAddress && (
+        {!walletAddress && !canUsePromoCode && (
           <Form.Item>
             <Alert
               message={t('notices.connectRequiredTitle')}
@@ -142,7 +147,11 @@ export const StoryForm: FC<Props> = ({ story, onChange, onGenerate }) => {
 
         <ActionBar
           actionStart={
-            <Button type="primary" disabled={!story.prompt || !walletAddress} onClick={onGenerate}>
+            <Button
+              type="primary"
+              disabled={(!story.prompt || !walletAddress) && !canUsePromoCode}
+              onClick={onGenerate}
+            >
               {t('StoryPage.generateStoryFor', {
                 cost: getReadableCost(calculateStoryGenerationCost(story.scenesNum || 1)),
               })}

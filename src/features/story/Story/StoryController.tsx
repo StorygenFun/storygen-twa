@@ -1,6 +1,7 @@
 'use client'
 
 import { FC, useEffect, useState } from 'react'
+import { fromNano } from '@ton/core'
 import { notification } from 'antd'
 import { v4 as uuidv4 } from 'uuid'
 import { Spinner } from '@/components/Spinner/Spinner'
@@ -12,6 +13,8 @@ import {
   extractObjectFromString,
   formatBrief,
 } from '@/features/story/utils/story.utils'
+import { calculateStoryGenerationCost } from '@/features/wallet/utils/payment.utils'
+import { useWalletStore } from '@/features/wallet/walletStore'
 import { useTranslation } from '@/i18n/client'
 import { StoryPayment } from '../StoryPayment/StoryPayment'
 import { StoryProgress } from '../StoryProgress/StoryProgress'
@@ -41,6 +44,7 @@ export const Story: FC<StoryProps> = ({ storyId, siteUrl }) => {
   const { isStoriesLoading, currentStep, getStoryById, changeCurrentStep, updateStory } =
     useStoryStore()
   const { createScene, getScenesByIds, updateScene } = useSceneStore()
+  const { promoCode, promoCodeBalance, reduceCodeBalance } = useWalletStore()
 
   const initialStory = getStoryById(storyId)
   const scenes = getScenesByIds(initialStory?.sceneIds || [])
@@ -208,11 +212,20 @@ export const Story: FC<StoryProps> = ({ storyId, siteUrl }) => {
   }
 
   const handleStartGeneration = async (currentStory: IStory) => {
-    if (currentStory.payment_transaction) {
+    const cost = Number(fromNano(calculateStoryGenerationCost(currentStory.scenesNum || 1)))
+    const canUsePromoCode = promoCodeBalance && promoCodeBalance >= cost
+
+    if (currentStory.payment_transaction || canUsePromoCode) {
       changeCurrentStep(GenerationStep.Brief)
       await handleBriefGenerate(currentStory)
+
+      if (canUsePromoCode && promoCode) {
+        reduceCodeBalance(promoCode, cost)
+      }
+
       return
     }
+
     setStoryForPay(currentStory)
   }
 
