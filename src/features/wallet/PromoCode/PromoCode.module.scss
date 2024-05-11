@@ -1,3 +1,13 @@
 .code {
   display: flex;
 }
+
+.promoButton {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #fff;
+  white-space: nowrap;
+  line-height: 1;
+  font-size: var(--font-small);
+}
