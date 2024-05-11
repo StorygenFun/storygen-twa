@@ -17,6 +17,7 @@ const translation = {
     imageModel: 'Модель для генерации обложки',
     writerStyle: 'Стиль автора',
     writers: {
+      own: 'Ваш собственный стиль',
       murakami: 'Харуки Мураками',
       orwell: 'Джордж Оруэлл',
       kafka: 'Франц Кафка',

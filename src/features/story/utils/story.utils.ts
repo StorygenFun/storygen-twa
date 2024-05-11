@@ -2,7 +2,7 @@ import { Translation } from '@/features/localization/types'
 import { CompactShortScene, IStory } from '@/features/story/type'
 
 export const getWriterStyleText = (story: IStory, t: Translation) => {
-  return !story.writer
+  return !story.writer || story.writer === 'own'
     ? t('prompts.writerVariant.unnamed')
     : t('prompts.writerVariant.named', {
         writer: t(`StoryPage.writers.${story.writer}`),

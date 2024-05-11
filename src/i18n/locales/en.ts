@@ -17,6 +17,7 @@ const translation = {
     imageModel: 'Model for generation of cover',
     writerStyle: "Writer's style",
     writers: {
+      own: 'Your own style',
       murakami: 'Haruki Murakami',
       orwell: 'George Orwell',
       kafka: 'Franz Kafka',

@@ -27,9 +27,13 @@ export const StoryForm: FC<Props> = ({ story, onChange, onGenerate }) => {
   const { walletAddress } = useWalletStore()
 
   const buildOptions = (list: string[], translationPrefix: string) => {
-    return list.map(item => {
-      return { value: item, label: t(`${translationPrefix}.${item}`) }
-    })
+    return [
+      ...list.map(item => ({ value: item, label: t(`${translationPrefix}.${item}`) })),
+      {
+        value: 'own',
+        label: t('StoryPage.ownStyle'),
+      },
+    ]
   }
 
   const writerOptions = buildOptions(Object.values(StoryWriter), 'StoryPage.writers')
@@ -98,12 +102,10 @@ export const StoryForm: FC<Props> = ({ story, onChange, onGenerate }) => {
 
         <Form.Item label={t('StoryPage.writerStyle')} name="writerValue">
           <Select
-            mode="tags"
             style={{ width: 300 }}
             placeholder={t('StoryPage.ownStyle')}
-            maxCount={1}
             options={writerOptions}
-            onChange={val => handleChange('writer', val[0])}
+            onChange={val => handleChange('writer', val)}
           />
         </Form.Item>
 
