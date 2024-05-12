@@ -1,7 +1,16 @@
+import { ChatOpenAI } from '@langchain/openai'
 import OpenAI from 'openai'
 import { LLMImageModel, LLMTextModel } from './types'
 
 export const LLMTextModelList = new Map([
+  [LLMTextModel.GPT3P5Turbo, 'GPT 3.5 Turbo'],
+  [LLMTextModel.GPT3P5Turbo16k, 'GPT 3.5 Turbo 16K'],
+  [LLMTextModel.GPT4P32K, 'GPT 4 32K'],
+  [LLMTextModel.GPT4Turbo, 'GPT 4 Turbo'],
+  [LLMTextModel.GPT4TurboPreview, 'GPT 4 Turbo Preview'],
+  [LLMTextModel.GPT4VisionPreview, 'GPT 4 Vision Preview'],
+  [LLMTextModel.GPT4Turbo2024P04P09, 'GPT 4 Turbo 	2024-02-16'],
+  [LLMTextModel.GPT4, 'GPT 4'],
   [LLMTextModel.LLaMA2Chat70B, 'Meta LLaMA-2 Chat (70B)'],
   [LLMTextModel.LLaMA2Chat13B, 'Meta LLaMA-2 Chat (13B)'],
   [LLMTextModel.LLaMA2Chat7B, 'Meta LLaMA-2 Chat (7B)'],
@@ -34,6 +43,12 @@ export const getClient = (key: string, baseURL?: string) => {
     apiKey: key,
     baseURL,
     dangerouslyAllowBrowser: true,
+  })
+}
+
+export const getLangChainClient = (key: string) => {
+  return new ChatOpenAI({
+    apiKey: key,
   })
 }
 

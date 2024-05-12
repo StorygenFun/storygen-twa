@@ -9,6 +9,7 @@ const translation = {
     storiesLoading: 'We upload your stories, please, wait a moment...',
     createNewStory: 'Create new story',
     removeStory: 'Are you sure to delete this story?',
+    storyName: 'Story name',
     defaultTitle: 'New Story',
     languageAnswer: 'Answer in English',
     prompt: 'Describe your story',
@@ -84,8 +85,7 @@ const translation = {
     audience: 'The target audience of this story is {{audience}}.',
     storyGenerator: {
       task: 'Your task is to create a list of {{num}} episodes based on the user prompt.',
-      main: `Format the response in a single JSON:
-[{"t": "_title_", "d": "_description_"}, ... {"t": "_title_", "d": "_description_"}]
+      main: `Format the response in a single JSON, with an array of objects "scene" with the fields "t" (title) and "d" (description), i.e. [scene, scene, ... scene].
 Do not number the episodes.'
 The size of each description is about {{size}} characters.
 Send a complete list of all {{num}} episodes without abbreviations or omissions.
@@ -98,12 +98,11 @@ There should be nothing in the response except this JSON.`,
     sceneSummaryGenerator: `Write a summary of the story from 300 to 500 characters. The response should contain only the summary and nothing more.`,
     storySummaryGenerator: `I have this story written:
 {{context}}
-Generate JSON in the following format:
-{summary: "_summary_", coverText: "_coverText_", description: "_description_", storyTitles: ["name1", "name2", ... "name10"]}
+Generate JSON in the following format: an object with the fields "summary", "coverText", "description", "storyTitles",
 where summary is a summary about of the story, from 300 to 500 characters;
-coverText - compose a prompt for generating an illustration for this story, a description of the main location of events for this story and a brief description of the main characters without mentioning their names, about 300 characters;
+coverText - compose a prompt for generating an cover for this story. It should include description of the main location of events for this story, a brief description of the main characters without mentioning their names, without any text on the cover, about 300 characters;
 description - a short description of the story;
-storyTitles - an array of 10 story titles.
+storyTitles - an array of 10 story titles (example: ["name1", "name2", ... "name10"]).
 `,
     sceneVolume: 'Write a text of {{from}}-{{to}} characters.',
   },
@@ -127,7 +126,11 @@ storyTitles - an array of 10 story titles.
     close: 'Close',
     pay: 'Pay',
     publish: 'Publish',
+    remove: 'Remove',
     clearDatabase: 'Clear Database',
+    tryAgain: 'Try again',
+    areYouSure: 'Are you sure?',
+    disconnect: 'Disconnect',
   },
   progress: {
     start: 'Start writing your new story',
@@ -141,13 +144,27 @@ storyTitles - an array of 10 story titles.
     coverDone: 'Cover is generated',
     completed: 'Your story is written',
   },
+  modal: {
+    profileInfo: 'Profile info',
+    yourAddress: 'Your wallet address',
+    yourLanguage: 'Your language',
+    debugMode: 'Debug mode',
+    havePromoCode: 'Have you any Promo Code?',
+    wrongAnswerFormat: 'Format of the answer is wrong',
+    canConnectAgain: 'Anyway, you can always connect again',
+    dangerZone: 'Danger zone',
+    removeBrief: 'Remove brief',
+    removeScenes: 'Remove scenes',
+    removeMeta: 'Remove meta',
+    removeCover: 'Remove cover',
+    closeAfterAction: 'Close after an action',
+  },
   notices: {
     connectRequiredTitle: 'You are not authorized',
     connectRequiredText: 'To generate story, you must log in with TON Connect.',
     createStory: 'Create your new story',
     deleteDB: 'Are you sure to clear your local database?',
     deleteDBDescription: 'Once the database is deleted, you cannot undo this action',
-    havePromoCode: 'Have you any Promo Code?',
   },
 }
 

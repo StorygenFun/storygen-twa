@@ -6,7 +6,9 @@ import { Alert, Button, Form, InputNumber, Select, Switch } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import { ActionBar } from '@/components/ActionBar/ActionBar'
 import { LLMImageModelList, LLMTextModelList } from '@/features/llm/constants'
+import { LLMTextModel } from '@/features/llm/types'
 import { IStory, StoryAudience, StoryGenre, StoryWriter } from '@/features/story/type'
+import { extendedAddresses } from '@/features/wallet/constants'
 import {
   calculateStoryGenerationCost,
   getReadableCost,
@@ -15,13 +17,18 @@ import { useWalletStore } from '@/features/wallet/walletStore'
 import { useTranslation } from '@/i18n/client'
 import styles from './StoryForm.module.scss'
 
+type modelOption = {
+  value: LLMTextModel
+  label: string
+}
+
+type KeyOfIStory = keyof IStory
+
 type Props = {
   story: IStory
   onChange: (story: IStory) => void
   onGenerate: () => void
 }
-
-type KeyOfIStory = keyof IStory
 
 export const StoryForm: FC<Props> = ({ story, onChange, onGenerate }) => {
   const { t } = useTranslation()
@@ -40,6 +47,12 @@ export const StoryForm: FC<Props> = ({ story, onChange, onGenerate }) => {
   const writerOptions = buildOptions(Object.values(StoryWriter), 'StoryPage.writers')
   const genreOptions = buildOptions(Object.values(StoryGenre), 'StoryPage.genres')
   const audienceOptions = buildOptions(Object.values(StoryAudience), 'StoryPage.audiences')
+
+  const modelsOptions = Array.from(LLMTextModelList, ([value, label]) => {
+    if (!value.startsWith('gpt-') || (walletAddress && extendedAddresses.includes(walletAddress))) {
+      return { value, label }
+    }
+  }).filter(Boolean) as modelOption[]
 
   const cost = Number(fromNano(calculateStoryGenerationCost(story.scenesNum || 1)))
 
@@ -89,7 +102,7 @@ export const StoryForm: FC<Props> = ({ story, onChange, onGenerate }) => {
           <Form.Item label={t('StoryPage.textModel')} name="textModelValue">
             <Select
               style={{ width: 300 }}
-              options={Array.from(LLMTextModelList, ([value, label]) => ({ value, label }))}
+              options={modelsOptions}
               onChange={val => handleChange('textModel', val)}
             />
           </Form.Item>

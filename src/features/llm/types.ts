@@ -1,4 +1,12 @@
 export enum LLMTextModel {
+  GPT3P5Turbo = 'gpt-3.5-turbo',
+  GPT3P5Turbo16k = 'gpt-3.5-turbo-16k',
+  GPT4P32K = 'gpt-4-32k',
+  GPT4Turbo = 'gpt-4-turbo',
+  GPT4TurboPreview = 'gpt-4-turbo-preview',
+  GPT4VisionPreview = 'gpt-4-vision-preview',
+  GPT4Turbo2024P04P09 = 'gpt-4-turbo-2024-04-09',
+  GPT4 = 'gpt-4',
   LLaMA2Chat70B = 'meta-llama/Llama-2-70b-chat-hf', // 4096
   LLaMA2Chat13B = 'meta-llama/Llama-2-13b-chat-hf', // 4096
   LLaMA2Chat7B = 'meta-llama/Llama-2-7b-chat-hf', // 4096

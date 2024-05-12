@@ -39,7 +39,7 @@ export const PromoCode: FC = () => {
       </button>
 
       <Modal
-        title={t('notices.havePromoCode')}
+        title={t('modal.havePromoCode')}
         centered
         open={isPromoCodeModalOpen}
         onOk={() => handleChange()}

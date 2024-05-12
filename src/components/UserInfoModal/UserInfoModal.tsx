@@ -21,17 +21,17 @@ export const UserInfoModal: FC<Props> = ({ isOpen, walletAddress, onLogout, onCl
 
   const data = [
     {
-      title: 'Your wallet address',
+      title: t('modal.yourAddress'),
       description: walletAddress,
       icon: <WalletOutlined />,
     },
     {
-      title: 'Your language',
+      title: t('modal.yourLanguage'),
       description: <LanguageSelector />,
       icon: <MessageOutlined />,
     },
     {
-      title: 'Debug mode',
+      title: t('modal.debugMode'),
       description: (
         <div>
           <Switch defaultChecked={isDebugMode} onChange={val => changeDebugMode(val)} />
@@ -47,23 +47,23 @@ export const UserInfoModal: FC<Props> = ({ isOpen, walletAddress, onLogout, onCl
 
   return (
     <Modal
-      title="Profile info"
+      title={t('modal.profileInfo')}
       centered
       open={isOpen}
       onCancel={onClose}
       footer={
         <div className={styles.footer}>
-          <Button onClick={onClose}>Close</Button>
+          <Button onClick={onClose}>{t('actions.close')}</Button>
 
           <Popconfirm
-            title="Are you sure?"
-            description="Anyway, you can always connect again"
+            title={t('actions.areYouSure')}
+            description={t('modal.canConnectAgain')}
             onConfirm={onLogout}
             okText={t('actions.yes')}
             cancelText={t('actions.no')}
           >
             <Button type="default" danger>
-              Disconnect
+              {t('actions.disconnect')}
             </Button>
           </Popconfirm>
         </div>
@@ -74,11 +74,7 @@ export const UserInfoModal: FC<Props> = ({ isOpen, walletAddress, onLogout, onCl
         dataSource={data}
         renderItem={item => (
           <List.Item>
-            <List.Item.Meta
-              avatar={item.icon}
-              title={<a href="https://ant.design">{item.title}</a>}
-              description={item.description}
-            />
+            <List.Item.Meta avatar={item.icon} title={item.title} description={item.description} />
           </List.Item>
         )}
       />

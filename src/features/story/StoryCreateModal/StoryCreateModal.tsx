@@ -42,7 +42,7 @@ export const StoryCreateModal: FC<Props> = ({ isOpen, onSubmit, onClose }) => {
 
   return (
     <Modal
-      title={t('notices.createStory')}
+      title={t('modal.createStory')}
       open={isOpen}
       confirmLoading={confirmLoading}
       okButtonProps={{ disabled: !storyTitle }}
@@ -54,7 +54,7 @@ export const StoryCreateModal: FC<Props> = ({ isOpen, onSubmit, onClose }) => {
       <Input
         value={storyTitle}
         onChange={val => setStoryTitle(val.target.value)}
-        placeholder="Story name"
+        placeholder={t('StoryPage.storyName')}
       />
     </Modal>
   )

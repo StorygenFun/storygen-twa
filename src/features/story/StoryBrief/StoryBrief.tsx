@@ -23,6 +23,7 @@ export const StoryBrief: FC<Props> = ({ brief, typeSpeed, isStoryGenerating, onC
   const [currentIndex, setCurrentIndex] = useState(0)
 
   const output = useMemo(() => {
+    if (typeof brief === 'string') return [{ content: brief, type: 'description' }]
     return brief?.flatMap(item => [
       { content: item.t, type: 'title' },
       { content: item.d, type: 'description' },
@@ -69,10 +70,10 @@ export const StoryBrief: FC<Props> = ({ brief, typeSpeed, isStoryGenerating, onC
       ) : (
         <Result
           status="warning"
-          title="Format of the answer is wrong"
+          title={t('modal.wrongAnswerFormat')}
           extra={
             <Button type="primary" onClick={onClear}>
-              Try again
+              {t('actions.tryAgain')}
             </Button>
           }
         />

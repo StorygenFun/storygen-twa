@@ -5,6 +5,7 @@ import { WarningOutlined } from '@ant-design/icons'
 import { Button, FloatButton, List, Modal, Switch } from 'antd'
 import { useSceneStore } from '@/features/scene/sceneStore'
 import { useWalletStore } from '@/features/wallet/walletStore'
+import { useTranslation } from '@/i18n/client'
 import { useStoryStore } from '../storyStore'
 
 type Props = {
@@ -12,6 +13,8 @@ type Props = {
 }
 
 export const StoryDebug: FC<Props> = ({ storyId }) => {
+  const { t } = useTranslation()
+
   const [isDebagActive, setIsDebagActive] = useState(false)
   const [shouldClose, setShouldClose] = useState(true)
   const { getStoryById, updateStory } = useStoryStore()
@@ -24,7 +27,7 @@ export const StoryDebug: FC<Props> = ({ storyId }) => {
     if (!initialStory) return []
     return [
       {
-        title: 'Remove brief',
+        title: t('modal.removeBrief'),
         isDisabled: !initialStory.brief,
         action: () => {
           updateStory(initialStory.id, { ...initialStory, brief: null })
@@ -32,7 +35,7 @@ export const StoryDebug: FC<Props> = ({ storyId }) => {
         },
       },
       {
-        title: 'Remove scenes',
+        title: t('modal.removeScenes'),
         isDisabled: !initialStory.sceneIds.length,
         action: () => {
           const ids = initialStory.sceneIds
@@ -42,7 +45,7 @@ export const StoryDebug: FC<Props> = ({ storyId }) => {
         },
       },
       {
-        title: 'Remove meta',
+        title: t('modal.removeMeta'),
         isDisabled: !initialStory.summary_en,
         action: () => {
           updateStory(initialStory.id, {
@@ -58,7 +61,7 @@ export const StoryDebug: FC<Props> = ({ storyId }) => {
         },
       },
       {
-        title: 'Remove cover',
+        title: t('modal.removeCover'),
         isDisabled: !initialStory.cover,
         action: () => {
           updateStory(initialStory.id, { ...initialStory, cover: null })
@@ -66,7 +69,7 @@ export const StoryDebug: FC<Props> = ({ storyId }) => {
         },
       },
     ]
-  }, [deleteScene, initialStory, shouldClose, updateStory])
+  }, [deleteScene, initialStory, shouldClose, t, updateStory])
 
   if (!storyId || !isDebugMode) return null
 
@@ -87,11 +90,13 @@ export const StoryDebug: FC<Props> = ({ storyId }) => {
             <span style={{ fontSize: '24px', color: '#ff4d4f' }}>
               <WarningOutlined />
             </span>{' '}
-            Danger zone
+            {t('modal.dangerZone')}
           </div>
         }
         centered
         open={isDebagActive}
+        okText={t('actions.close')}
+        cancelText={t('actions.cancel')}
         onOk={() => setIsDebagActive(false)}
         onCancel={() => setIsDebagActive(false)}
       >
@@ -101,14 +106,14 @@ export const StoryDebug: FC<Props> = ({ storyId }) => {
             <List.Item key={item.title}>
               <List.Item.Meta title={item.title} />
               <Button type="primary" danger disabled={item.isDisabled} onClick={item.action}>
-                Remove
+                {t('actions.remove')}
               </Button>
             </List.Item>
           )}
         />
         <div>
-          <Switch defaultChecked={shouldClose} onChange={val => setShouldClose(val)} /> Close after
-          an action
+          <Switch defaultChecked={shouldClose} onChange={val => setShouldClose(val)} />{' '}
+          {t('modal.closeAfterAction')}
         </div>
       </Modal>
     </>
