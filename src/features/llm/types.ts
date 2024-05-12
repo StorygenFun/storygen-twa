@@ -7,6 +7,9 @@ export enum LLMTextModel {
   GPT4VisionPreview = 'gpt-4-vision-preview',
   GPT4Turbo2024P04P09 = 'gpt-4-turbo-2024-04-09',
   GPT4 = 'gpt-4',
+  Claude3Opus = 'claude-3-opus-20240229',
+  Claude3Sonnet = 'claude-3-sonnet-20240229',
+  Claude3Haiku = 'claude-3-haiku-20240307',
   LLaMA2Chat70B = 'meta-llama/Llama-2-70b-chat-hf', // 4096
   LLaMA2Chat13B = 'meta-llama/Llama-2-13b-chat-hf', // 4096
   LLaMA2Chat7B = 'meta-llama/Llama-2-7b-chat-hf', // 4096

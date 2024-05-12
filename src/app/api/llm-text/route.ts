@@ -9,7 +9,7 @@ const fetchOpenAI = async (
   textModel: LLMTextModel,
   url?: string,
 ): Promise<Response> => {
-  const isLangChain = textModel.startsWith('gpt-')
+  const isLangChain = textModel.startsWith('gpt-') || textModel.startsWith('claude-')
 
   const key = isLangChain
     ? process.env.NEXT_PUBLIC_OPENAI_API_KEY

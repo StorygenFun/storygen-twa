@@ -49,7 +49,10 @@ export const StoryForm: FC<Props> = ({ story, onChange, onGenerate }) => {
   const audienceOptions = buildOptions(Object.values(StoryAudience), 'StoryPage.audiences')
 
   const modelsOptions = Array.from(LLMTextModelList, ([value, label]) => {
-    if (!value.startsWith('gpt-') || (walletAddress && extendedAddresses.includes(walletAddress))) {
+    if (
+      !(value.startsWith('gpt-') || value.startsWith('claude-')) ||
+      (walletAddress && extendedAddresses.includes(walletAddress))
+    ) {
       return { value, label }
     }
   }).filter(Boolean) as modelOption[]
