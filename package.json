@@ -11,6 +11,10 @@
   "dependencies": {
     "@ant-design/icons": "^5.3.6",
     "@ant-design/nextjs-registry": "^1.0.0",
+    "@langchain/community": "^0.0.56",
+    "@langchain/core": "^0.1.62",
+    "@langchain/google-genai": "^0.0.12",
+    "@langchain/openai": "^0.0.28",
     "@next/env": "^14.2.3",
     "@orbs-network/ton-access": "^2.3.3",
     "@supabase/supabase-js": "^2.43.1",
@@ -26,6 +30,7 @@
     "i18next": "^23.11.2",
     "i18next-browser-languagedetector": "^7.2.1",
     "i18next-resources-to-backend": "^1.2.1",
+    "langchain": "^0.1.37",
     "lottie-react": "^2.4.0",
     "next": "14.2.3",
     "next-i18next": "^15.3.0",
@@ -61,6 +66,9 @@
     "postcss": "^8.4.38",
     "sass": "^1.75.0",
     "typescript": "^5"
+  },
+  "overrides": {
+    "@langchain/core": "^0.1.62"
   },
   "engines": {
     "node": ">=20.0.0"
