@@ -7,7 +7,7 @@ import TextArea from 'antd/es/input/TextArea'
 import { LLMChain } from 'langchain/chains'
 import { ConversationSummaryMemory } from 'langchain/memory'
 
-const openAIApiKey = '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'
+const openAIApiKey = '123'
 
 const model = new ChatOpenAI({
   openAIApiKey: openAIApiKey,

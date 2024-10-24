@@ -10,11 +10,11 @@ import { MemoryVectorStore } from 'langchain/vectorstores/memory'
 type StoryProps = {}
 
 export const Story: FC<StoryProps> = () => {
-  // openAIApiKey: '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',
+  // openAIApiKey: '123',
   const testMemory = async () => {
     const vectorStore = new MemoryVectorStore(
       new OpenAIEmbeddings({
-        openAIApiKey: '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',
+        openAIApiKey: '123',
       }),
     )
     const memory = new VectorStoreRetrieverMemory({
