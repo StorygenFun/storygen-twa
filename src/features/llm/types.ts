@@ -7,6 +7,7 @@ export enum LLMTextModel {
   GPT4VisionPreview = 'gpt-4-vision-preview',
   GPT4Turbo2024P04P09 = 'gpt-4-turbo-2024-04-09',
   GPT4 = 'gpt-4',
+  GPT4O = 'gpt-4o',
   Claude3Opus = 'claude-3-opus-20240229',
   Claude3Sonnet = 'claude-3-sonnet-20240229',
   Claude3Haiku = 'claude-3-haiku-20240307',

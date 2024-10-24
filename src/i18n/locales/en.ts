@@ -158,11 +158,11 @@ storyTitles - an array of 10 story titles (example: ["name1", "name2", ... "name
     removeMeta: 'Remove meta',
     removeCover: 'Remove cover',
     closeAfterAction: 'Close after an action',
+    createStory: 'Create your new story',
   },
   notices: {
     connectRequiredTitle: 'You are not authorized',
     connectRequiredText: 'To generate story, you must log in with TON Connect.',
-    createStory: 'Create your new story',
     deleteDB: 'Are you sure to clear your local database?',
     deleteDBDescription: 'Once the database is deleted, you cannot undo this action',
   },

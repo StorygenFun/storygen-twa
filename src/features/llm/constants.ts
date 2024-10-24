@@ -11,6 +11,7 @@ export const LLMTextModelList = new Map([
   [LLMTextModel.GPT4VisionPreview, 'GPT 4 Vision Preview'],
   [LLMTextModel.GPT4Turbo2024P04P09, 'GPT 4 Turbo 	2024-02-16'],
   [LLMTextModel.GPT4, 'GPT 4'],
+  [LLMTextModel.GPT4O, 'GPT 4o'],
   [LLMTextModel.Claude3Opus, 'Claude 3 Opus'],
   [LLMTextModel.Claude3Sonnet, 'Claude 3 Sonnet'],
   [LLMTextModel.Claude3Haiku, 'Claude 3 Haiku'],
