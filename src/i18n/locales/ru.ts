@@ -158,11 +158,11 @@ storyTitles - массив из 10 названий истории на русс
     removeMeta: 'Удалить дополнительные данные',
     removeCover: 'Удалить обложку',
     closeAfterAction: 'Закрыть после действия',
+    createStory: 'Создать новую историю',
   },
   notices: {
     connectRequiredTitle: 'Вы не авторизованы',
     connectRequiredText: 'Для генерации истории необходимо авторизоваться с помощью TON Connect.',
-    createStory: 'Создать новую историю',
     deleteDB: 'Вы уверены, что хотите удалить базу данных?',
     deleteDBDescription: 'Это действие нельзя будет отменить. Все данные будут утеряны.',
   },
