@@ -10,11 +10,11 @@ import { MemoryVectorStore } from 'langchain/vectorstores/memory'
 type StoryProps = {}
 
 export const Story: FC<StoryProps> = () => {
-  // openAIApiKey: '123',
+  // openAIApiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
   const testMemory = async () => {
     const vectorStore = new MemoryVectorStore(
       new OpenAIEmbeddings({
-        openAIApiKey: '123',
+        openAIApiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
       }),
     )
     const memory = new VectorStoreRetrieverMemory({
@@ -41,7 +41,7 @@ export const Story: FC<StoryProps> = () => {
     // Now let's use it in a chain.
     const model = new OpenAI({
       temperature: 0.9,
-      openAIApiKey: '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',
+      openAIApiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
     })
     const prompt =
       PromptTemplate.fromTemplate(`The following is a friendly conversation between a human and an AI. The AI is talkative and provides lots of specific details from its context. If the AI does not know the answer to a question, it truthfully says it does not know.

@@ -8,9 +8,8 @@ import TextArea from 'antd/es/input/TextArea'
 import { LLMChain } from 'langchain/chains'
 import { ConversationSummaryMemory } from 'langchain/memory'
 
-// const openAIApiKey = '123'
-const anthropicApiKey =
-  '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'
+// const openAIApiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY
+const anthropicApiKey = process.env.NEXT_PUBLIC_ANTHROPIC_API_KEY
 
 // const modeOpenAi = new ChatOpenAI({
 //   openAIApiKey: openAIApiKey,
