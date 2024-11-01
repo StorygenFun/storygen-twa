@@ -20,7 +20,7 @@ export const StoryCover: FC<Props> = ({ story, isGenerating, onGenerate }) => {
   const [isChanging, setIsChanging] = useState(false)
   const [isStarted, setIsStarted] = useState(false)
   const [imageModel, setImageModel] = useState<LLMImageModel>(
-    story.imageModel || LLMImageModel.Leonardo,
+    story.imageModel || LLMImageModel.Flux1SchnellTurbo,
   )
 
   const handleSubmit = () => {

@@ -42,10 +42,10 @@ export const askImageLLM = async (options: LLMImageQuery) => {
   try {
     const { data } = await axios.post('/api/llm-image', {
       prompt,
-      imageModel: imageModel || LLMImageModel.RealisticVision,
+      imageModel: imageModel || LLMImageModel.Flux1SchnellTurbo,
     })
 
-    return data[0]
+    return data.data[0]
   } catch (error: any) {
     throw new Error(error.message)
   }

@@ -28,17 +28,12 @@ export const LLMTextModelList = new Map([
 export const DEFAULT_TEXT_MODEL = LLMTextModel.Mixtral8x22BInstruct141B
 
 export const LLMImageModelList = new Map([
-  [LLMImageModel.Openjourney4, 'Prompt Hero Openjourney v4'],
-  [LLMImageModel.RunwayStableDiffusion, 'Runway ML Stable Diffusion 1.5'],
-  [LLMImageModel.RealisticVision, 'Realistic Vision 3.0'],
-  [LLMImageModel.StableDiffusion2, 'Stable Diffusion 2.1'],
+  [LLMImageModel.Flux1SchnellTurbo, 'Flux.1 [schnell] (Turbo)'],
   [LLMImageModel.StableDiffusionXL, 'Stable Diffusion XL 1.0'],
-  [LLMImageModel.AnalogDiffusion, 'Analog Diffusion'],
-  [LLMImageModel.Leonardo, 'Leonardo.AI'],
-  // [LLMImageModel.StabilityDiffusion3Turbo, 'Stable Diffusion 3 Turbo'],
+  // [LLMImageModel.Leonardo, 'Leonardo.AI'],
 ])
 
-export const DEFAULT_IMAGE_MODEL = LLMImageModel.Leonardo
+export const DEFAULT_IMAGE_MODEL = LLMImageModel.Flux1SchnellTurbo
 
 export const TOGETHER_AI_URL = 'https://api.together.xyz/v1'
 

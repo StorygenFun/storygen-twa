@@ -22,14 +22,9 @@ export enum LLMTextModel {
 }
 
 export enum LLMImageModel {
-  Openjourney4 = 'prompthero/openjourney',
-  RunwayStableDiffusion = 'runwayml/stable-diffusion-v1-5',
-  RealisticVision = 'SG161222/Realistic_Vision_V3.0_VAE',
-  StableDiffusion2 = 'stabilityai/stable-diffusion-2-1',
+  Flux1SchnellTurbo = 'black-forest-labs/FLUX.1-schnell',
   StableDiffusionXL = 'stabilityai/stable-diffusion-xl-base-1.0',
-  AnalogDiffusion = 'wavymulder/Analog-Diffusion',
-  StabilityDiffusion3Turbo = 'stability.ai/v2beta/stable-image/generate/sd3',
-  Leonardo = 'leonardo',
+  // Leonardo = 'leonardo',
 }
 
 export enum LeonardoModel {

@@ -1,33 +1,40 @@
 import axios from 'axios'
 import FormData from 'form-data'
 import { NextRequest } from 'next/server'
-import { getClient } from '@/features/llm/constants'
 import { LLMImageModel } from '@/features/llm/types'
 
-const fetchOpenAI = async (
-  prompt: string,
-  imageModel: LLMImageModel,
-  url?: string,
-): Promise<Response> => {
+const fetchOpenAI = async (prompt: string, imageModel: LLMImageModel): Promise<Response> => {
   const key = process.env.NEXT_PUBLIC_TOGETHER_API_KEY
   if (!key) return new Response(null, { status: 500, statusText: 'API key is missing.' })
 
-  const client = getClient(key, url)
-  if (!client) return new Response(null, { status: 500, statusText: 'Client creation failed.' })
-
-  try {
-    const response = await client.images.generate({
-      prompt: prompt,
+  const options = {
+    method: 'POST',
+    headers: {
+      accept: 'application/json',
+      'content-type': 'application/json',
+      authorization: 'Bearer ' + key,
+    },
+    body: JSON.stringify({
+      steps: 4,
+      n: 1,
+      height: 768,
+      width: 768,
+      prompt,
       model: imageModel,
-    })
-
-    return new Response(JSON.stringify(response.data), {
-      headers: { 'Content-Type': 'application/json' },
-    })
-  } catch (error: any) {
-    console.error(error)
-    return new Response(JSON.stringify({ error: error.message }), { status: 500 })
+    }),
   }
+  return fetch('https://api.together.xyz/v1/images/generations', options)
+    .then(res => res.json())
+    .then(res => {
+      console.log('🪲', res)
+      return new Response(JSON.stringify(res), {
+        headers: { 'Content-Type': 'application/json' },
+      })
+    })
+    .catch(err => {
+      console.error(err)
+      return new Response(JSON.stringify({ error: err.message }), { status: 500 })
+    })
 }
 
 const fetchStabilityDiffusionResponse = async (prompt: string): Promise<Response> => {
@@ -69,9 +76,9 @@ export async function POST(req: NextRequest): Promise<Response> {
   const body = await req.json()
   const { prompt, imageModel } = body
 
-  if (imageModel === LLMImageModel.StabilityDiffusion3Turbo) {
+  if (imageModel === LLMImageModel.StableDiffusionXL) {
     return fetchStabilityDiffusionResponse(prompt)
   }
 
-  return fetchOpenAI(prompt, imageModel, 'https://api.together.xyz/v1')
+  return fetchOpenAI(prompt, imageModel)
 }

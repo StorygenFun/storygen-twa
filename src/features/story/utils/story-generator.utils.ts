@@ -1,4 +1,4 @@
-import axios from 'axios'
+// import axios from 'axios'
 import { Translation } from '@/features/localization/types'
 import { IScene } from '@/features/scene/type'
 import {
@@ -128,60 +128,60 @@ const generateWithOpenAIApi = async (story: IStory, imageModel: LLMImageModel) =
   }
 }
 
-const generateWithLeonardo = async (story: IStory): Promise<string> => {
-  try {
-    const { data: generationId } = await axios.post<string>('/api/leonardo-generate-image', {
-      prompt: story.cover_text_en,
-    })
-    // const generationId = 'd1451eb1-334c-46ee-842e-321f0c1f84d6'
+// const generateWithLeonardo = async (story: IStory): Promise<string> => {
+//   try {
+//     const { data: generationId } = await axios.post<string>('/api/leonardo-generate-image', {
+//       prompt: story.cover_text_en,
+//     })
+//     // const generationId = 'd1451eb1-334c-46ee-842e-321f0c1f84d6'
 
-    const getGeneratedImage = (): Promise<string> => {
-      let totalTime = 0
-      const maxTime = 20000
+//     const getGeneratedImage = (): Promise<string> => {
+//       let totalTime = 0
+//       const maxTime = 20000
 
-      return new Promise((resolve, reject) => {
-        const checkImage = async () => {
-          try {
-            const { data: imageUrl } = await axios.post<string>('/api/leonardo-get-image', {
-              generationId,
-            })
+//       return new Promise((resolve, reject) => {
+//         const checkImage = async () => {
+//           try {
+//             const { data: imageUrl } = await axios.post<string>('/api/leonardo-get-image', {
+//               generationId,
+//             })
 
-            if (imageUrl) {
-              resolve(imageUrl)
-            } else if (totalTime < maxTime) {
-              setTimeout(checkImage, 1000)
-              totalTime += 1000
-            } else {
-              reject(new Error('Timeout reached without retrieving an image.'))
-            }
-          } catch (error: any) {
-            if (error.response && error.response.status === 404 && totalTime < maxTime) {
-              setTimeout(checkImage, 1000)
-              totalTime += 1000
-            } else {
-              reject(new Error('An error occurred: ' + error.message))
-            }
-          }
-        }
+//             if (imageUrl) {
+//               resolve(imageUrl)
+//             } else if (totalTime < maxTime) {
+//               setTimeout(checkImage, 1000)
+//               totalTime += 1000
+//             } else {
+//               reject(new Error('Timeout reached without retrieving an image.'))
+//             }
+//           } catch (error: any) {
+//             if (error.response && error.response.status === 404 && totalTime < maxTime) {
+//               setTimeout(checkImage, 1000)
+//               totalTime += 1000
+//             } else {
+//               reject(new Error('An error occurred: ' + error.message))
+//             }
+//           }
+//         }
 
-        checkImage()
-      })
-    }
+//         checkImage()
+//       })
+//     }
 
-    return await getGeneratedImage()
-  } catch (error: any) {
-    throw new Error(error.message)
-  }
-}
+//     return await getGeneratedImage()
+//   } catch (error: any) {
+//     throw new Error(error.message)
+//   }
+// }
 
 export const generateCover = async (story: IStory, imageModel: LLMImageModel) => {
   if (!story.cover_text_en) {
     throw new Error('Cover prompt is empty')
   }
 
-  if (imageModel === LLMImageModel.Leonardo) {
-    return generateWithLeonardo(story)
-  }
+  // if (imageModel === LLMImageModel.Leonardo) {
+  //   return generateWithLeonardo(story)
+  // }
 
   return generateWithOpenAIApi(story, imageModel)
 }
