@@ -44,7 +44,7 @@ export const Story: FC<StoryProps> = ({ storyId, siteUrl }) => {
   const { isStoriesLoading, currentStep, getStoryById, changeCurrentStep, updateStory } =
     useStoryStore()
   const { createScene, getScenesByIds, updateScene } = useSceneStore()
-  const { promoCode, promoCodeBalance, reduceCodeBalance } = useWalletStore()
+  const { promoCode, reduceCodeBalance } = useWalletStore()
 
   const initialStory = getStoryById(storyId)
   const scenes = getScenesByIds(initialStory?.sceneIds || [])
