@@ -1,7 +1,7 @@
 import { FC, PropsWithChildren } from 'react'
 import { Header as AntHeader } from 'antd/es/layout/layout'
 import Link from 'next/link'
-import { PromoCode } from '@/features/wallet/PromoCode/PromoCode'
+// import { PromoCode } from '@/features/wallet/PromoCode/PromoCode'
 import { WalletSection } from '@/features/wallet/WalletSection/WalletSection'
 import { createTranslation } from '@/i18n/server'
 import { Container } from '../Container/Container'
@@ -58,7 +58,7 @@ export const Header: FC<PropsWithChildren> = async () => {
           </li>
         </ul>
 
-        <PromoCode />
+        {/* <PromoCode /> */}
 
         <WalletSection siteUrl={process.env.NEXT_PUBLIC_BASE_URL || 'https://storygen.fun'} />
       </Container>
