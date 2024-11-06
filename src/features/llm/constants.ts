@@ -12,6 +12,7 @@ export const LLMTextModelList = new Map([
   [LLMTextModel.GPT4Turbo2024P04P09, 'GPT 4 Turbo 	2024-02-16'],
   [LLMTextModel.GPT4, 'GPT 4'],
   [LLMTextModel.GPT4O, 'GPT 4o'],
+  [LLMTextModel.GPT4OMini, 'GPT 4o Mini'],
   [LLMTextModel.Claude3Opus, 'Claude 3 Opus'],
   [LLMTextModel.Claude3Sonnet, 'Claude 3 Sonnet'],
   [LLMTextModel.Claude3Haiku, 'Claude 3 Haiku'],
@@ -20,12 +21,13 @@ export const LLMTextModelList = new Map([
   [LLMTextModel.LLaMA2Chat7B, 'Meta LLaMA-2 Chat (7B)'],
   [LLMTextModel.LLaMA3Chat8B, 'Meta LLaMA-3 Chat (8B)'],
   [LLMTextModel.LLaMA3Chat70B, 'Meta LLaMA-3 Chat (70B)'],
+  [LLMTextModel.LLaMA3p1Chat70BInstructTurbo, 'Llama 3.1 70B Instruct Turbo'],
   [LLMTextModel.Mistral7BInstruct02, 'Mistral (7B) Instruct 0.2'],
   [LLMTextModel.Mistral8x7BInstruct, 'Mistral 8x7B Instruct (46.7B)'],
   [LLMTextModel.Mixtral8x22BInstruct141B, 'Mixtral-8x22B Instruct (141B)'],
 ])
 
-export const DEFAULT_TEXT_MODEL = LLMTextModel.Mixtral8x22BInstruct141B
+export const DEFAULT_TEXT_MODEL = LLMTextModel.GPT4OMini
 
 export const LLMImageModelList = new Map([
   [LLMImageModel.Flux1SchnellTurbo, 'Flux.1 [schnell] (Turbo)'],
@@ -51,4 +53,4 @@ export const getLangChainClient = (key: string) => {
   })
 }
 
-export const DEFAULT_TYPING_SPEED = 1
+export const DEFAULT_TYPING_SPEED = 0.1

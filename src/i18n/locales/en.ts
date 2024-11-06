@@ -92,19 +92,19 @@ Send a complete list of all {{num}} episodes without abbreviations or omissions.
 There should be nothing in the response except this JSON.`,
     },
     sceneTitlePrefix: 'Scene',
-    sceneWrite: 'Write episode number {{num}} in as much detail as possible',
+    sceneWrite:
+      'Write untitled episode number {{num}} in as much detail as possible without any numbering of the episode.',
     sceneGenerator: `The response should contain only the episode and nothing more. The size of the episode is about {{size}} characters. Do not number the episodes.`,
     scenePrompt: `Write a separate episode of the story based on this brief description:\n\n{{context}}`,
     sceneSummaryGenerator: `Write a summary of the story from 300 to 500 characters. The response should contain only the summary and nothing more.`,
-    storySummaryGenerator: `I have this story written:
-{{context}}
+    storySummaryGenerator: `I have this story written: {{context}}
 Generate JSON in the following format: an object with the fields "summary", "coverText", "description", "storyTitles",
 where summary is a summary about of the story, from 300 to 500 characters;
 coverText - compose a prompt for generating an cover for this story. It should include description of the main location of events for this story, a brief description of the main characters without mentioning their names, without any text on the cover, about 300 characters;
 description - a short description of the story;
 storyTitles - an array of 10 story titles (example: ["name1", "name2", ... "name10"]).
 `,
-    sceneVolume: 'Write a text of {{from}}-{{to}} characters.',
+    sceneVolume: 'Write a text of {{from}}-{{to}} characters without any numbering of the episode.',
   },
   notFound: {
     stories: {

@@ -8,6 +8,7 @@ export enum LLMTextModel {
   GPT4Turbo2024P04P09 = 'gpt-4-turbo-2024-04-09',
   GPT4 = 'gpt-4',
   GPT4O = 'gpt-4o',
+  GPT4OMini = 'gpt-4o-mini',
   Claude3Opus = 'claude-3-opus-20240229',
   Claude3Sonnet = 'claude-3-sonnet-20240229',
   Claude3Haiku = 'claude-3-haiku-20240307',
@@ -16,6 +17,7 @@ export enum LLMTextModel {
   LLaMA2Chat7B = 'meta-llama/Llama-2-7b-chat-hf', // 4096
   LLaMA3Chat8B = 'meta-llama/Llama-3-8b-chat-hf', // 8000
   LLaMA3Chat70B = 'meta-llama/Llama-3-70b-chat-hf', // 8000
+  LLaMA3p1Chat70BInstructTurbo = 'meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo', // 131072
   Mistral7BInstruct02 = 'mistralai/Mistral-7B-Instruct-v0.2', // 32768
   Mistral8x7BInstruct = 'mistralai/Mixtral-8x7B-Instruct-v0.1', // 32768
   Mixtral8x22BInstruct141B = 'mistralai/Mixtral-8x22B-Instruct-v0.1', // 65536

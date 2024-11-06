@@ -44,7 +44,7 @@ export const Story: FC<StoryProps> = ({ storyId, siteUrl }) => {
   const { isStoriesLoading, currentStep, getStoryById, changeCurrentStep, updateStory } =
     useStoryStore()
   const { createScene, getScenesByIds, updateScene } = useSceneStore()
-  const { promoCode, reduceCodeBalance } = useWalletStore()
+  const { promoCode, promoCodeBalance, reduceCodeBalance } = useWalletStore()
 
   const initialStory = getStoryById(storyId)
   const scenes = getScenesByIds(initialStory?.sceneIds || [])
@@ -187,7 +187,7 @@ export const Story: FC<StoryProps> = ({ storyId, siteUrl }) => {
     setIsStoryGenerating(false)
 
     if (currentStory.isSimple) {
-      handleMetaGenerate(updatedStory, scenesList)
+      handleMetaGenerate(updatedStory, getScenesByIds(updatedStory?.sceneIds || []))
     }
   }
 
@@ -213,8 +213,8 @@ export const Story: FC<StoryProps> = ({ storyId, siteUrl }) => {
 
   const handleStartGeneration = async (currentStory: IStory) => {
     const cost = Number(fromNano(calculateStoryGenerationCost(currentStory.scenesNum || 1)))
-    // const canUsePromoCode = promoCodeBalance && promoCodeBalance >= cost
-    const canUsePromoCode = false
+    const canUsePromoCode = promoCodeBalance && promoCodeBalance >= cost
+    // const canUsePromoCode = promoCodeBalance && promoCodeBalance >= cost && false
 
     if (currentStory.payment_transaction || canUsePromoCode) {
       changeCurrentStep(GenerationStep.Brief)
