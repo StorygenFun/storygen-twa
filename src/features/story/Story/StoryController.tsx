@@ -213,8 +213,8 @@ export const Story: FC<StoryProps> = ({ storyId, siteUrl }) => {
 
   const handleStartGeneration = async (currentStory: IStory) => {
     const cost = Number(fromNano(calculateStoryGenerationCost(currentStory.scenesNum || 1)))
-    const canUsePromoCode = promoCodeBalance && promoCodeBalance >= cost
-    // const canUsePromoCode = promoCodeBalance && promoCodeBalance >= cost && false
+    // const canUsePromoCode = promoCodeBalance && promoCodeBalance >= cost
+    const canUsePromoCode = promoCodeBalance && promoCodeBalance >= cost && false
 
     if (currentStory.payment_transaction || canUsePromoCode) {
       changeCurrentStep(GenerationStep.Brief)
